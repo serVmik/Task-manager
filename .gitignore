@@ -1,0 +1,7 @@
+.env
+.idea/
+.coverage
+coverage.xml
+__pycache__/
+dist/
+db.sqlite3

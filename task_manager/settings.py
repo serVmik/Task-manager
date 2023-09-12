@@ -184,7 +184,7 @@ BOOTSTRAP5 = {
     'server_side_validation': True,
 
     # Renderers (only set these if you have studied the source and understand the inner workings).
-    'formset_renderers':{
+    'formset_renderers': {
         'default': 'django_bootstrap5.renderers.FormsetRenderer',
     },
     'form_renderers': {

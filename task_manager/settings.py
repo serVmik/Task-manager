@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django_bootstrap5',
 
     'task_manager',
+    'task_manager.users'
 ]
 
 MIDDLEWARE = [
@@ -79,6 +80,9 @@ DATABASES = {
     }
 }
 
+
+# https://docs.djangoproject.com/en/4.1/topics/auth/customizing/#substituting-a-custom-user-model
+AUTH_USER_MODEL = 'users.AppUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

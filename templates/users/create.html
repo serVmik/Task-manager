@@ -3,11 +3,12 @@
 {% load i18n %}
 
 {% block content %}
+<!--======= User Registration Content =======-->
 <h1>{{ title }}</h1>
 
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">{% trans 'Create' %}</button>
-</form>
+</form><!-- End User Registration Content -->
 {% endblock %}

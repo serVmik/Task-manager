@@ -6,9 +6,13 @@
     <li class="nav-item"><a class="nav-link" href="{% url 'users:list' %}">{% trans 'Users' %}</a></li>
 
     {% if user.is_authenticated %}
-      <li class="nav-item"><a class="nav-link" href="#">{{ user.username }} | {% trans 'Logout' %}</a></li>
+      <li class="nav-item"><a class="nav-link disabled" href="#">{{ user.username }}</a></li>
+      <p class="nav-link">|</p>
+      <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
     {% else %}
-      <li class="nav-item"><a class="nav-link" href="#">{% trans 'Registration' %} | {% trans 'Login' %}</a></li>
+      <li class="nav-item"><a class="nav-link" href="{% url 'users:create' %}">{% trans 'Registration' %}</a></li>
+      <p class="nav-link">|</p>
+      <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">{% trans 'Login' %}</a></li>
     {% endif %}
 
     <!--======= Form Select Language =======-->
@@ -23,7 +27,7 @@
           {% get_language_info_list for LANGUAGES as languages %}
           {% for language in languages %}
             <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
-            {{ language.name_local }} ({{ language.code }})
+              {{ language.name_local }} ({{ language.code }})
             </option>
           {% endfor %}
         </select>

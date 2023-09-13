@@ -1,9 +1,10 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
-from .views import IndexView
+from .views import HomeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', IndexView.as_view(), name='index')
+    path('', HomeView.as_view(), name='home'),
+    path('users/', include('task_manager.users.urls', namespace='users'))
 ]

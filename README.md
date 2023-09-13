@@ -1,4 +1,2 @@
 [![Actions Status](https://github.com/serVmik/python-project-52/workflows/hexlet-check/badge.svg)](https://github.com/serVmik/python-project-52/actions)
 [![Actions Status](https://github.com/serVmik/python-project-83/workflows/hexlet-check/badge.svg)](https://github.com/serVmik/python-project-83/actions)
-<a href="https://codeclimate.com/github/serVmik/python-project-52/maintainability"><img src="https://api.codeclimate.com/v1/badges/2b2b35099b6a3b683240/maintainability" /></a>
-<a href="https://codeclimate.com/github/serVmik/python-project-52/test_coverage"><img src="https://api.codeclimate.com/v1/badges/2b2b35099b6a3b683240/test_coverage" /></a>

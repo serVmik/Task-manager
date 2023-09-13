@@ -1,24 +1,15 @@
 {% load i18n %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-md">
-    <ul class="navbar-nav">
+<nav class="container p-0">
+  <ul class="nav">
 
-      <li class="nav-item">
-        <a href="#">{% trans 'Task manager' %}</a>
-      </li>
-      <li class="nav-item">
-        <a href="#">{% trans 'User' %}</a>
-      </li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">{% trans 'Task manager' %}</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'users:list' %}">{% trans 'Users' %}</a></li>
 
-      {% if request.user.is_authenticated %}
-        <li class="nav-item">
-          {{ request.user.username }} | <a href="#">{% trans 'Logout' %}</a>
-        </li>
-      {% else %}
-        <li class="nav-item">
-          <a href="#">{% trans 'Registration' %}</a> | <a href="#">{% trans 'Login' %}</a>
-        </li>
-      {% endif %}
-    </ul>
-  </div>
+    {% if user.is_authenticated %}
+      <li class="nav-item"><a class="nav-link" href="#">{{ user.username }} | {% trans 'Logout' %}</a></li>
+    {% else %}
+      <li class="nav-item"><a class="nav-link" href="#">{% trans 'Registration' %} | {% trans 'Login' %}</a></li>
+    {% endif %}
+
+  </ul>
 </nav>

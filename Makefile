@@ -3,6 +3,12 @@ MANAGE := python manage.py
 dev:
 	@$(MANAGE) runserver
 
+mess:
+	python manage.py makemessages -l ru -i venv
+
+compile:
+	python manage.py compilemessages
+
 lint:
 	poetry run flake8 task_manager
 

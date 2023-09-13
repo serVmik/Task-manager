@@ -13,4 +13,5 @@ urlpatterns = [
     path('login/', UserLoginView.as_view(), name='login'),
     path('logout/', logout_user, name='logout'),
     path('users/', include('task_manager.users.urls', namespace='users')),
+    prefix_default_language=False,
 )

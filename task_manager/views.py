@@ -11,7 +11,7 @@ class HomeView(TemplateView):
     extra_context = {
         'title': _('Task manager'),
         'text': _('Task manager'),
-        'greetings': 'Hello!',
+        'greetings': _('Hello!'),
     }
 
 

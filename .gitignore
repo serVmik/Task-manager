@@ -1,7 +1,8 @@
 .env
-.idea/
 .coverage
+logging.log
 coverage.xml
-__pycache__/
-dist/
 db.sqlite3
+.idea/
+dist/
+__pycache__/

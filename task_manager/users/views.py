@@ -1,10 +1,16 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
+from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+
+import logging
 
 from ..mixins import TestUserAuthorizationMixin
 from .models import AppUser
 from .forms import UserCreateForm, UserUpdateForm
+
+logger = logging.getLogger('__name__')
 
 
 class UserListView(ListView):
@@ -13,10 +19,15 @@ class UserListView(ListView):
     template_name = 'users/list.html'
 
 
-class UserCreateView(CreateView):
+class UserCreateView(SuccessMessageMixin, CreateView):
     form_class = UserCreateForm
     template_name = 'users/create.html'
     success_url = reverse_lazy('login')
+    success_message = _('New user successfully registered')
+    if success_message:
+        logger.debug('New user successfully registered. id_username = ')
+    else:
+        logger.error('User registration error.')
 
 
 class UserUpdateView(LoginRequiredMixin, TestUserAuthorizationMixin, UpdateView):

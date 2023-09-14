@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 import os
 from dotenv import load_dotenv
 
+from .logging_formatters import CustomJsonFormatter
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -52,6 +54,44 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'main_formatter': {
+            'format': '{asctime} - {levelname} - {module} - {message}',
+            'style': '{',
+        },
+        'json_formatter': {
+            '()': CustomJsonFormatter,
+        }
+    },
+
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'main_formatter',
+            'level': 'DEBUG',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'formatter': 'json_formatter',
+            'filename': 'logging.log',
+            'level': 'DEBUG',
+        },
+    },
+
+    'loggers': {
+        'main_log': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 
 ROOT_URLCONF = 'task_manager.urls'
 

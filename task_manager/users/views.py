@@ -10,7 +10,7 @@ from ..mixins import TestUserAuthorizationMixin
 from .models import AppUser
 from .forms import UserCreateForm, UserUpdateForm
 
-logger = logging.getLogger('__name__')
+logger = logging.getLogger('main_log')
 
 
 class UserListView(ListView):
@@ -30,7 +30,7 @@ class UserCreateView(SuccessMessageMixin, CreateView):
     if success_message:
         logger.debug('New user successfully registered. id_username = ')
     else:
-        logger.error('User registration error.')
+        logger.warning('User registration error.')
 
 
 class UserUpdateView(LoginRequiredMixin, TestUserAuthorizationMixin, UpdateView):
@@ -41,9 +41,20 @@ class UserUpdateView(LoginRequiredMixin, TestUserAuthorizationMixin, UpdateView)
     extra_context = {
         'title': 'Edit',
     }
+    success_message = _('Successfully updated')
+    if success_message:
+        logger.debug('User data successfully updated. id_username = ')
+    else:
+        logger.warning('Error updating user data. id_username = ')
 
 
 class UserDeleteView(LoginRequiredMixin, TestUserAuthorizationMixin, DeleteView):
     model = AppUser
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users:list')
+
+    success_message = _('Your account has been successfully deleted!')
+    if success_message:
+        logger.debug('User deleted. id_username = ')
+    else:
+        logger.warning('Error deleting user. id_username = ')

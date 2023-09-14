@@ -5,6 +5,12 @@
 {% block content %}
 <!--======= Users List Content =======-->
 <div class="container">
+<h1>
+  {% block title %}
+  {% trans 'Users' %}
+  {% endblock %}
+</h1>
+
 <table>
 
   <thead>
@@ -18,18 +24,18 @@
   </thead>
 
   <tbody>
-    <tr>
-      {% for user in users %}
+    {% for user in users %}
+      <tr>
         <td>{{ user.pk }}</td>
         <td>{{ user.username }}</td>
         <td>{{ user.first_name }} {{ user.last_name }}</td>
         <td>{{ user.date_joined | date:'d-m-Y H:i' }}</td>
         <td>
-          <a href="#">{% trans 'Change' %}</a>
-          <a href="#">{% trans 'Delete' %}</a>
+          <a href="{% url 'users:update' user.pk %}">{% trans 'Change' %}</a>
+          <a href="{% url 'users:delete' user.pk %}">{% trans 'Delete' %}</a>
         </td>
-      {% endfor %}
-    </tr>
+      </tr>
+    {% endfor %}
   </tbody>
 
 </table>

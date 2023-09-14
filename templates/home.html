@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block content %}
 <!--======= Home Page Content =======-->
 <div class="card container">
   <div class="ard-body p-5">
-    <h1>{{ text }}</h1>
-    <p>{{ greetings }}</p>
+    <h1>
+      {% block title %}
+      {% trans 'Task manager' %}
+      {% endblock %}
+    </h1>
+    <p>{% trans 'Hello!' %}</p>
   </div>
 </div><!-- End Home Page Content -->
 {% endblock %}

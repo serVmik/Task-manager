@@ -85,8 +85,13 @@ DATABASES = {
 }
 
 
+# User
 # https://docs.djangoproject.com/en/4.1/topics/auth/customizing/#substituting-a-custom-user-model
 AUTH_USER_MODEL = 'users.AppUser'
+
+# https://docs.djangoproject.com/en/4.2/ref/settings/#login-redirect-url
+LOGIN_REDIRECT_URL = 'home'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

@@ -1,4 +1,5 @@
 {% load i18n %}
+
 <!--======== Navigation =======-->
 <nav class="container p-0">
   <ul class="nav">
@@ -15,26 +16,6 @@
       <p class="nav-link">|</p>
       <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">{% trans 'Login' %}</a></li>
     {% endif %}
-
-    <!--======= Language Selection Form =======-->
-    <!-- https://docs.djangoproject.com/en/4.1/topics/i18n/translation/#the-set-language-redirect-view -->
-    <li class="nav-link">
-      <form action="{% url 'set_language' %}" method="post">
-        {% csrf_token %}
-        <input name="next" type="hidden" value="{{ redirect_to }}">
-        <select name="language">
-          {% get_current_language as LANGUAGE_CODE %}
-          {% get_available_languages as LANGUAGES %}
-          {% get_language_info_list for LANGUAGES as languages %}
-          {% for language in languages %}
-            <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
-              {{ language.name_local }} ({{ language.code }})
-            </option>
-          {% endfor %}
-        </select>
-        <input type="submit" value="Go">
-      </form>
-    </li><!-- End Language Selection Form -->
 
   </ul>
 </nav><!-- End Navigation -->

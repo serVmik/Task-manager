@@ -21,8 +21,11 @@ class UserListView(ListView):
 
 class UserCreateView(SuccessMessageMixin, CreateView):
     form_class = UserCreateForm
-    template_name = 'users/create.html'
+    template_name = 'users/form.html'
     success_url = reverse_lazy('login')
+    extra_context = {
+        'title': 'Registration',
+    }
     success_message = _('New user successfully registered')
     if success_message:
         logger.debug('New user successfully registered. id_username = ')
@@ -33,8 +36,11 @@ class UserCreateView(SuccessMessageMixin, CreateView):
 class UserUpdateView(LoginRequiredMixin, TestUserAuthorizationMixin, UpdateView):
     model = AppUser
     form_class = UserUpdateForm
-    template_name = 'users/update.html'
+    template_name = 'users/form.html'
     success_url = reverse_lazy('login')
+    extra_context = {
+        'title': 'Edit',
+    }
 
 
 class UserDeleteView(LoginRequiredMixin, TestUserAuthorizationMixin, DeleteView):

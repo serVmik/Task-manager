@@ -132,6 +132,8 @@ AUTH_USER_MODEL = 'users.AppUser'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL = 'home'
 
+# https://docs.djangoproject.com/en/4.2/ref/settings/#login-url
+LOGIN_URL = 'login'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

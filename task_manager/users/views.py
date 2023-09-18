@@ -46,7 +46,7 @@ class UserUpdateView(LoginRequiredMixin, TestUserAuthorizationMixin,
     model = AppUser
     form_class = UserUpdateForm
     template_name = 'users/form.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('users:list')
     extra_context = {
         'title': 'Edit',
     }

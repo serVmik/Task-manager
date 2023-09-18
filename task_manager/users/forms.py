@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, ValidationError
+from django.contrib.auth.forms import UserCreationForm
 
 from task_manager.users.models import AppUser
 

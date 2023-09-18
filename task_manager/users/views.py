@@ -35,7 +35,7 @@ class UserCreateView(SuccessMessageMixin, CreateView):
         return response
 
     def form_invalid(self, form):
-        logger.error('User deletion error.')
+        logger.error('User registration error.')
         response = super().form_invalid(form)
         messages.error(self.request, _('User registration error.'))
         return response

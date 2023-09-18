@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -26,14 +27,22 @@ class UserCreateView(SuccessMessageMixin, CreateView):
     extra_context = {
         'title': 'Registration',
     }
-    success_message = _('New user successfully registered')
-    if success_message:
-        logger.debug('New user successfully registered. id_username = ')
-    else:
-        logger.warning('User registration error.')
+
+    def form_valid(self, form):
+        logger.debug('User is registered.')
+        response = super().form_valid(form)
+        messages.success(self.request, _('User is registered.'))
+        return response
+
+    def form_invalid(self, form):
+        logger.error('User deletion error.')
+        response = super().form_invalid(form)
+        messages.error(self.request, _('User registration error.'))
+        return response
 
 
-class UserUpdateView(LoginRequiredMixin, TestUserAuthorizationMixin, UpdateView):
+class UserUpdateView(LoginRequiredMixin, TestUserAuthorizationMixin,
+                     UpdateView):
     model = AppUser
     form_class = UserUpdateForm
     template_name = 'users/form.html'
@@ -41,20 +50,35 @@ class UserUpdateView(LoginRequiredMixin, TestUserAuthorizationMixin, UpdateView)
     extra_context = {
         'title': 'Edit',
     }
-    success_message = _('Successfully updated')
-    if success_message:
-        logger.debug('User data successfully updated. id_username = ')
-    else:
-        logger.warning('Error updating user data. id_username = ')
+    raise_exception = False
+
+    def form_valid(self, form):
+        logger.debug('User data updated.')
+        response = super().form_valid(form)
+        messages.success(self.request, _('User data updated.'))
+        return response
+
+    def form_invalid(self, form):
+        logger.error('User update error.')
+        response = super().form_invalid(form)
+        messages.error(self.request, _('User update error.'))
+        return response
 
 
-class UserDeleteView(LoginRequiredMixin, TestUserAuthorizationMixin, DeleteView):
+class UserDeleteView(LoginRequiredMixin, TestUserAuthorizationMixin,
+                     DeleteView):
     model = AppUser
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users:list')
 
-    success_message = _('Your account has been successfully deleted!')
-    if success_message:
-        logger.debug('User deleted. id_username = ')
-    else:
-        logger.warning('Error deleting user. id_username = ')
+    def form_valid(self, form):
+        logger.debug('User deleted.')
+        response = super().form_valid(form)
+        messages.success(self.request, _('User deleted.'))
+        return response
+
+    def form_invalid(self, form):
+        logger.error('User deletion error.')
+        response = super().form_invalid(form)
+        messages.error(self.request, _('User deletion error.'))
+        return response

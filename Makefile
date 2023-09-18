@@ -4,16 +4,16 @@ dev:
 	@$(MANAGE) runserver
 
 mess:
-	python manage.py makemessages -l ru -i venv
+	@$(MANAGE) makemessages -l ru -i venv
 
 compile:
-	python manage.py compilemessages
+	@$(MANAGE) compilemessages
 
 lint:
 	poetry run flake8 task_manager
 
 test:
-	poetry run pytest -vv -s
+	@$(MANAGE) test tests
 
 test-coverage:
 	poetry run coverage run --source="task_manager" manage.py test task_manager

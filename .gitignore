@@ -6,3 +6,4 @@ db.sqlite3
 .idea/
 dist/
 __pycache__/
+htmlcov/

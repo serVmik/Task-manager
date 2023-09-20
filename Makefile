@@ -10,7 +10,7 @@ compile:
 	@$(MANAGE) compilemessages
 
 lint:
-	poetry run flake8 task_manager
+	poetry run flake8
 
 test:
 	@$(MANAGE) test tests

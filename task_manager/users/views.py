@@ -3,11 +3,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+
 from django.utils.translation import gettext_lazy as _
 
 import logging
 
-from ..mixins import TestUserAuthorizationMixin
+from ..mixins import TestUserAuthorizationMixin, AppUserPassesTestMixin
 from .models import AppUser
 from .forms import UserCreateForm, UserUpdateForm
 
@@ -42,7 +43,7 @@ class UserCreateView(SuccessMessageMixin, CreateView):
 
 
 class UserUpdateView(LoginRequiredMixin, TestUserAuthorizationMixin,
-                     UpdateView):
+                     AppUserPassesTestMixin, UpdateView):
     model = AppUser
     form_class = UserUpdateForm
     template_name = 'users/form.html'
@@ -66,7 +67,7 @@ class UserUpdateView(LoginRequiredMixin, TestUserAuthorizationMixin,
 
 
 class UserDeleteView(LoginRequiredMixin, TestUserAuthorizationMixin,
-                     DeleteView):
+                     AppUserPassesTestMixin, DeleteView):
     model = AppUser
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users:list')

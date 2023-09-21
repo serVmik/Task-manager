@@ -3,7 +3,8 @@ from django.test import TestCase
 from django.urls import reverse
 
 from task_manager.users.models import AppUser
-from task_manager.users.views import UserListView, UserUpdateView
+from task_manager.users.views import (UserListView, UserUpdateView,
+                                      UserDeleteView)
 
 
 class UserCrudTestCase(TestCase):
@@ -78,5 +79,26 @@ class UserCrudTestCase(TestCase):
         current_user_data = AppUser.objects.get(pk=user.pk)
         self.assertTrue(current_user_data.check_password('r4d3s2q1'))
 
-    # def test_html_delete(self):
-    #     pass
+    def test_delete_user(self):
+        user = AppUser.objects.get(username='ivan_ivanov')
+        self.client.force_login(user)
+        url_delete = reverse('users:delete', kwargs={'pk': user.pk})
+
+        # test page method=get
+        response = self.client.get(url_delete, kwargs={'pk': user.pk})
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(url_delete, f'/users/{user.pk}/delete/')
+        self.assertTemplateUsed(response, 'users/delete.html')
+        self.assertIs(response.resolver_match.func.view_class, UserDeleteView)
+
+        # test page method=post
+        response = self.client.post(url_delete, kwargs={'pk': user.pk})
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(url_delete, f'/users/{user.pk}/delete/')
+        self.assertRedirects(response, reverse('users:list'))
+        self.assertIs(response.resolver_match.func.view_class, UserDeleteView)
+
+        # test whether the user is deleted
+        assert not AppUser.objects.filter(username='ivan_ivanov').exists()
+        # with self.assertRaises(ObjectDoesNotExist):
+        #     AppUser.objects.get(username='ivan_ivanov')

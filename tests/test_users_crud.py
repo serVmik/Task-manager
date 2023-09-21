@@ -85,20 +85,20 @@ class UserCrudTestCase(TestCase):
         url_delete = reverse('users:delete', kwargs={'pk': user.pk})
 
         # test page method=get
-        response = self.client.get(url_delete, kwargs={'pk': user.pk})
+        response = self.client.get(url_delete)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_delete, f'/users/{user.pk}/delete/')
         self.assertTemplateUsed(response, 'users/delete.html')
         self.assertIs(response.resolver_match.func.view_class, UserDeleteView)
 
         # test page method=post
-        response = self.client.post(url_delete, kwargs={'pk': user.pk})
+        response = self.client.post(url_delete)
         self.assertEquals(response.status_code, 302)
         self.assertEquals(url_delete, f'/users/{user.pk}/delete/')
         self.assertRedirects(response, reverse('users:list'))
         self.assertIs(response.resolver_match.func.view_class, UserDeleteView)
 
         # test whether the user is deleted
-        assert not AppUser.objects.filter(username='ivan_ivanov').exists()
+        self.assertFalse(AppUser.objects.filter(username='ivan_ivanov').exists())  # noqa: E501
         # with self.assertRaises(ObjectDoesNotExist):
         #     AppUser.objects.get(username='ivan_ivanov')

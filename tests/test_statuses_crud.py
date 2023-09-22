@@ -1,13 +1,17 @@
 from django.test import TestCase
 from django.utils.translation import gettext_lazy as _
-
 from django.urls import reverse
 
 from task_manager.mixins import test_flash_message
-from task_manager.statuses.models import Status
-from task_manager.statuses.views import (CreateStatusView, ListStatusView,
-                                         UpdateStatusView, DeleteStatusView)
 from task_manager.users.models import AppUser
+
+from task_manager.statuses.models import Status
+from task_manager.statuses.views import (
+    CreateStatusView,
+    ListStatusesView,
+    UpdateStatusView,
+    DeleteStatusView
+)
 
 
 class StatusesCrudTest(TestCase):
@@ -23,29 +27,45 @@ class StatusesCrudTest(TestCase):
         )
 
     def test_create_status(self):
+        user = AppUser.objects.get(username='ivan_ivanov')
         created_status = {
             'name': 'created_status'
         }
         url_create = reverse('statuses:create')
 
+        """ Test create status by authenticated user """
+
+        self.client.force_login(user)
+
         # page test, method=get
         response = self.client.get(url_create)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_create, '/statuses/create/')
-        self.assertTemplateUsed(response, '/statuses/form.html')
+        self.assertTemplateUsed(response, 'statuses/form.html')
         self.assertIs(response.resolver_match.func.view_class, CreateStatusView)
 
-        # test page method=post
+        # page test, method=post
         response = self.client.post(url_create, created_status)
-        self.assertEquals(response.status_code, 302)
-        self.assertEquals(url_create, 'statuses/create/')
-        self.assertRedirects(response, reverse('statuses:list'))
+        self.assertEquals(url_create, '/statuses/create/')
+        self.assertRedirects(response, reverse('statuses:list'), 302)
         self.assertIs(response.resolver_match.func.view_class, CreateStatusView)
         test_flash_message(response, _('Status successfully created'))
 
         # status create test
-        status = Status.objects.get(name='petr_petrov')
+        status = Status.objects.get(name='created_status')
         self.assertEquals(status.name, 'created_status')
+
+        self.client.logout()
+
+        """ Test try to create status by anonymous """
+
+        response = self.client.get(url_create)
+        self.assertEquals(response.status_code, 302)
+        test_flash_message(response, _('Invalid action.'))
+        self.client.logout()
+        response = self.client.post(url_create, created_status)
+        self.assertEquals(response.status_code, 302)
+        test_flash_message(response, _('Invalid action.'))
 
     def test_read_status(self):
         url_reade = reverse('statuses:list')
@@ -56,7 +76,7 @@ class StatusesCrudTest(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_reade, '/statuses/')
         self.assertTemplateUsed(response, 'statuses/list.html')
-        self.assertIs(response.resolver_match.func.view_class, ListStatusView)
+        self.assertIs(response.resolver_match.func.view_class, ListStatusesView)
 
         # user read test
         html = response.content.decode()
@@ -67,7 +87,7 @@ class StatusesCrudTest(TestCase):
     def test_update_status(self):
         old_status = Status.objects.get(name='name_status')
         url_update = reverse('statuses:update', kwargs={'pk': old_status.pk})
-        new_status = {
+        updated_status = {
             'name': 'updated_status',
         }
 
@@ -79,17 +99,51 @@ class StatusesCrudTest(TestCase):
         self.assertIs(response.resolver_match.func.view_class, UpdateStatusView)
 
         # page test, method=post
-        response = self.client.post(url_update, new_status)
+        response = self.client.post(url_update, updated_status)
         self.assertEquals(url_update, f'/statuses/{old_status.pk}/update/')
         self.assertRedirects(response, reverse('statuses:list'), 302)
         self.assertIs(response.resolver_match.func.view_class, UpdateStatusView)
         test_flash_message(response, _('Status updated successfully'))
 
         # status update test
-        [current_status] = Status.objects.get(pk=old_status.pk).values()
-        expected_status = new_status['name']
+        [current_status] = Status.objects.filter(pk=old_status.pk).values()
+        expected_status = updated_status['name']
         assert expected_status == current_status['name']
 
     def test_delete_status(self):
-        status = ''
+        status = Status.objects.get(name='name_status')
+        user = AppUser.objects.get(username='ivan_ivanov')
         url_delete = reverse('statuses:delete', kwargs={'pk': status.pk})
+
+        """ Test delete status by authenticated user """
+
+        self.client.force_login(user)
+
+        # page test, method=get
+        response = self.client.get(url_delete)
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(url_delete, f'/statuses/{status.pk}/delete/')
+        self.assertTemplateUsed(response, 'statuses/delete.html')
+        self.assertIs(response.resolver_match.func.view_class, DeleteStatusView)
+
+        # page test, method=post
+        response = self.client.post(url_delete)
+        self.assertEquals(url_delete, f'/statuses/{status.pk}/delete/')
+        self.assertRedirects(response, reverse('statuses:list'), 302)
+        self.assertIs(response.resolver_match.func.view_class, DeleteStatusView)
+        test_flash_message(response, _('Status successfully deleted'))
+
+        # status deletion test
+        self.assertFalse(Status.objects.filter(name='name_status').exists())
+
+        self.client.logout()
+
+        """ Try to delete status by anonymous """
+
+        response = self.client.get(url_delete)
+        self.assertEquals(response.status_code, 302)
+        test_flash_message(response, _('Invalid action.'))
+        self.client.logout()
+        response = self.client.post(url_delete)
+        self.assertEquals(response.status_code, 302)
+        test_flash_message(response, _('Invalid action.'))

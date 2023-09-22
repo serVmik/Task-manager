@@ -27,21 +27,29 @@ class UserCrudTestCase(TestCase):
             'password2': 'q1s2d3r4',
         }
 
-        # test page method=get
+        # test whether the current_user is authenticated
+        current_user = AppUser.objects.get(username='ivan_ivanov')
+        self.client.force_login(current_user)
+        response = self.client.get(url_create)
+        self.assertEquals(response.status_code, 403)
+        test_flash_message(response, _('Invalid action.'))
+        self.client.logout()
+
+        # page test, method=get
         response = self.client.get(url_create)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_create, '/users/create/')
         self.assertTemplateUsed(response, 'users/form.html')
         self.assertIs(response.resolver_match.func.view_class, UserCreateView)
 
-        # test page method=post
+        # page test, method=post
         response = self.client.post(url_create, user_being_created)
         self.assertEquals(url_create, '/users/create/')
         self.assertRedirects(response, reverse('login'), 302)
         self.assertIs(response.resolver_match.func.view_class, UserCreateView)
         test_flash_message(response, _('User is registered.'))
 
-        # test whether the user is created
+        # user create test
         user = AppUser.objects.get(username='petr_petrov')
         self.assertEquals(user.get_full_name(), 'Petr Petrov')
         self.assertTrue(user.check_password('q1s2d3r4'))
@@ -50,14 +58,14 @@ class UserCrudTestCase(TestCase):
         url_list = reverse('users:list')
         user = AppUser.objects.get(username='ivan_ivanov')
 
-        # test page method=get
+        # page test, method=get
         response = self.client.get(url_list)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_list, '/users/')
         self.assertTemplateUsed(response, 'users/list.html')
         self.assertIs(response.resolver_match.func.view_class, UserListView)
 
-        # test user data
+        # user read test
         html = response.content.decode()
         self.assertInHTML(str(user.pk), html)
         self.assertInHTML('ivan_ivanov', html)
@@ -76,21 +84,21 @@ class UserCrudTestCase(TestCase):
         }
         self.client.force_login(old_user_data)
 
-        # test page method=get
+        # page test, method=get
         response = self.client.get(url_update)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_update, f'/users/{old_user_data.pk}/update/')
         self.assertTemplateUsed(response, 'users/form.html')
         self.assertIs(response.resolver_match.func.view_class, UserUpdateView)
 
-        # test page method=post
+        # page test, method=post
         response = self.client.post(url_update, new_user_data)
         self.assertEquals(url_update, f'/users/{old_user_data.pk}/update/')
         self.assertRedirects(response, reverse('users:list'), 302)
         self.assertIs(response.resolver_match.func.view_class, UserUpdateView)
         test_flash_message(response, _('User data updated.'))
 
-        # test whether the user is updated
+        # user update test
         [current_user_data] = AppUser.objects.filter(pk=old_user_data.pk).values()  # noqa: E501
         for key in ('username', 'first_name', 'last_name'):
             self.assertEquals(new_user_data[key], current_user_data[key])
@@ -102,19 +110,19 @@ class UserCrudTestCase(TestCase):
         url_delete = reverse('users:delete', kwargs={'pk': user.pk})
         self.client.force_login(user)
 
-        # test page method=get
+        # page test, method=get
         response = self.client.get(url_delete)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_delete, f'/users/{user.pk}/delete/')
         self.assertTemplateUsed(response, 'users/delete.html')
         self.assertIs(response.resolver_match.func.view_class, UserDeleteView)
 
-        # test page method=post
+        # page test, method=post
         response = self.client.post(url_delete)
         self.assertEquals(url_delete, f'/users/{user.pk}/delete/')
         self.assertRedirects(response, reverse('users:list'), 302)
         self.assertIs(response.resolver_match.func.view_class, UserDeleteView)
         test_flash_message(response, _('User deleted.'))
 
-        # test whether the user is deleted
+        # user deletion test
         self.assertFalse(AppUser.objects.filter(username='ivan_ivanov').exists())  # noqa: E501

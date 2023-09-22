@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 import logging
 
-from ..mixins import TestUserAuthorizationMixin, AppUserPassesTestMixin
+from ..mixins import UserPassesTestOwnerMixin, NotLoginRequiredMixin
 from .models import AppUser
 from .forms import UserCreateForm, UserUpdateForm
 
@@ -21,7 +21,7 @@ class UserListView(ListView):
     template_name = 'users/list.html'
 
 
-class UserCreateView(SuccessMessageMixin, CreateView):
+class UserCreateView(NotLoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = UserCreateForm
     template_name = 'users/form.html'
     success_url = reverse_lazy('login')
@@ -42,8 +42,8 @@ class UserCreateView(SuccessMessageMixin, CreateView):
         return response
 
 
-class UserUpdateView(LoginRequiredMixin, TestUserAuthorizationMixin,
-                     AppUserPassesTestMixin, UpdateView):
+class UserUpdateView(LoginRequiredMixin,
+                     UserPassesTestOwnerMixin, UpdateView):
     model = AppUser
     form_class = UserUpdateForm
     template_name = 'users/form.html'
@@ -66,8 +66,8 @@ class UserUpdateView(LoginRequiredMixin, TestUserAuthorizationMixin,
         return response
 
 
-class UserDeleteView(LoginRequiredMixin, TestUserAuthorizationMixin,
-                     AppUserPassesTestMixin, DeleteView):
+class UserDeleteView(LoginRequiredMixin,
+                     UserPassesTestOwnerMixin, DeleteView):
     model = AppUser
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users:list')

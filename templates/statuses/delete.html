@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block content%}
+<div class="container card p-4">
+<h1>
+  {% block title %}
+  {% trans 'Delete status' %}
+  {% endblock title %}
+</h1>
+
+<p>{% trans 'Delete?' %}</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">{% trans 'Yes, delete!' %}</button>
+</form>
+</div>
+
+
+{% endblock %}

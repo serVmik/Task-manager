@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django_bootstrap5',
 
     'task_manager',
-    'task_manager.users'
+    'task_manager.users',
+    'task_manager.statuses',
 ]
 
 # https://docs.djangoproject.com/en/4.1/topics/i18n/translation/#how-django-discovers-language-preference

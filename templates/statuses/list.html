@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+<!--======= Status List Content =======-->
+<h1>
+  {% block title %}
+  {% trans 'Statuses' %}
+  {% endblock %}
+</h1>
+
+<a href="{% url 'statuses:create' %}">{% trans 'Create status' %}</a>
+
+<table>
+
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>{% trans 'Name' %}</th>
+      <th>{% trans 'Date of creation' %}</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for status in statuses %}
+      <tr>
+        <td>{{ status.pk }}</td>
+        <td>{{ status.name }}</td>
+        <td>{{ status.created_at | date:'d-m-Y H:i' }}</td>
+        <td>
+          <a href="{% url 'statuses:update' status.pk %}">{% trans 'Edit' %}</a>
+          <a href="{% url 'statuses:delete' status.pk %}">{% trans 'Delete' %}</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+
+</table><!--======= End Status List Content =======-->
+{% endblock %}

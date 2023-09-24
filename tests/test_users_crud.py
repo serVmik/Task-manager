@@ -4,8 +4,12 @@ from django.utils.translation import gettext_lazy as _
 
 from task_manager.mixins import test_flash_message
 from task_manager.users.models import AppUser
-from task_manager.users.views import (UserCreateView, UserListView,
-                                      UserUpdateView, UserDeleteView)
+from task_manager.users.views import (
+    UserCreateView,
+    UserListView,
+    UserUpdateView,
+    UserDeleteView
+)
 
 
 class UserCrudTestCase(TestCase):

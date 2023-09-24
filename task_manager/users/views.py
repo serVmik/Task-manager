@@ -26,7 +26,7 @@ class UserCreateView(NotLoginRequiredMixin, SuccessMessageMixin, CreateView):
     template_name = 'users/form.html'
     success_url = reverse_lazy('login')
     extra_context = {
-        'title': 'Registration',
+        'title': _('Registration'),
     }
 
     def form_valid(self, form):
@@ -49,7 +49,7 @@ class UserUpdateView(LoginRequiredMixin,
     template_name = 'users/form.html'
     success_url = reverse_lazy('users:list')
     extra_context = {
-        'title': 'Edit',
+        'title': _('Edit user'),
     }
     raise_exception = False
 

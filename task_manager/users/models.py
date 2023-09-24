@@ -8,4 +8,4 @@ class AppUser(AbstractUser):
         return self.get_full_name()
 
     def get_absolute_url(self):
-        return reverse('user', kwargs={'pk': self.pk})
+        return reverse('users', kwargs={'pk': self.pk})

@@ -3,12 +3,13 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from task_manager.mixins import test_flash_message
+
 from task_manager.users.models import AppUser
 from task_manager.users.views import (
-    UserCreateView,
-    UserListView,
-    UserUpdateView,
-    UserDeleteView
+    CreateUserView,
+    ListUsersView,
+    UpdateUserView,
+    DeleteUserView,
 )
 
 
@@ -44,13 +45,13 @@ class UserCrudTestCase(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_create, '/users/create/')
         self.assertTemplateUsed(response, 'users/form.html')
-        self.assertIs(response.resolver_match.func.view_class, UserCreateView)
+        self.assertIs(response.resolver_match.func.view_class, CreateUserView)
 
         # page test, method=post
         response = self.client.post(url_create, user_being_created)
         self.assertEquals(url_create, '/users/create/')
         self.assertRedirects(response, reverse('login'), 302)
-        self.assertIs(response.resolver_match.func.view_class, UserCreateView)
+        self.assertIs(response.resolver_match.func.view_class, CreateUserView)
         test_flash_message(response, _('User is registered.'))
 
         # user create test
@@ -67,7 +68,7 @@ class UserCrudTestCase(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_list, '/users/')
         self.assertTemplateUsed(response, 'users/list.html')
-        self.assertIs(response.resolver_match.func.view_class, UserListView)
+        self.assertIs(response.resolver_match.func.view_class, ListUsersView)
 
         # user read test
         html = response.content.decode()
@@ -93,13 +94,13 @@ class UserCrudTestCase(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_update, f'/users/{old_user_data.pk}/update/')
         self.assertTemplateUsed(response, 'users/form.html')
-        self.assertIs(response.resolver_match.func.view_class, UserUpdateView)
+        self.assertIs(response.resolver_match.func.view_class, UpdateUserView)
 
         # page test, method=post
         response = self.client.post(url_update, new_user_data)
         self.assertEquals(url_update, f'/users/{old_user_data.pk}/update/')
         self.assertRedirects(response, reverse('users:list'), 302)
-        self.assertIs(response.resolver_match.func.view_class, UserUpdateView)
+        self.assertIs(response.resolver_match.func.view_class, UpdateUserView)
         test_flash_message(response, _('User data updated.'))
 
         # user update test
@@ -119,13 +120,13 @@ class UserCrudTestCase(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_delete, f'/users/{user.pk}/delete/')
         self.assertTemplateUsed(response, 'users/delete.html')
-        self.assertIs(response.resolver_match.func.view_class, UserDeleteView)
+        self.assertIs(response.resolver_match.func.view_class, DeleteUserView)
 
         # page test, method=post
         response = self.client.post(url_delete)
         self.assertEquals(url_delete, f'/users/{user.pk}/delete/')
         self.assertRedirects(response, reverse('users:list'), 302)
-        self.assertIs(response.resolver_match.func.view_class, UserDeleteView)
+        self.assertIs(response.resolver_match.func.view_class, DeleteUserView)
         test_flash_message(response, _('User deleted.'))
 
         # user deletion test

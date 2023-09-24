@@ -1,6 +1,6 @@
 from django.test import TestCase
-from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from task_manager.mixins import test_flash_message
 from task_manager.users.models import AppUser
@@ -10,7 +10,7 @@ from task_manager.statuses.views import (
     CreateStatusView,
     ListStatusesView,
     UpdateStatusView,
-    DeleteStatusView
+    DeleteStatusView,
 )
 
 
@@ -28,9 +28,7 @@ class StatusesCrudTest(TestCase):
 
     def test_create_status(self):
         user = AppUser.objects.get(username='ivan_ivanov')
-        created_status = {
-            'name': 'created_status'
-        }
+        created_status = {'name': 'created_status'}
         url_create = reverse('statuses:create')
 
         """ Test create status by authenticated user """
@@ -67,9 +65,11 @@ class StatusesCrudTest(TestCase):
         self.assertEquals(response.status_code, 302)
         test_flash_message(response, _('Invalid action.'))
 
-    def test_read_status(self):
+    def test_read_statuses(self):
         url_reade = reverse('statuses:list')
         status = Status.objects.get(name='name_status')
+        user = AppUser.objects.get(username='ivan_ivanov')
+        self.client.force_login(user)
 
         # page test, method=get
         response = self.client.get(url_reade)
@@ -78,7 +78,7 @@ class StatusesCrudTest(TestCase):
         self.assertTemplateUsed(response, 'statuses/list.html')
         self.assertIs(response.resolver_match.func.view_class, ListStatusesView)
 
-        # user read test
+        # statuses list read test
         html = response.content.decode()
         self.assertInHTML(str(status.pk), html)
         self.assertInHTML('name_status', html)
@@ -87,9 +87,9 @@ class StatusesCrudTest(TestCase):
     def test_update_status(self):
         old_status = Status.objects.get(name='name_status')
         url_update = reverse('statuses:update', kwargs={'pk': old_status.pk})
-        updated_status = {
-            'name': 'updated_status',
-        }
+        updated_status = {'name': 'updated_status'}
+        user = AppUser.objects.get(username='ivan_ivanov')
+        self.client.force_login(user)
 
         # page test, method=get
         response = self.client.get(url_update)

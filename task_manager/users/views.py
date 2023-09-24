@@ -1,9 +1,7 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-
 from django.utils.translation import gettext_lazy as _
 
 import logging
@@ -15,13 +13,13 @@ from .forms import UserCreateForm, UserUpdateForm
 logger = logging.getLogger('main_log')
 
 
-class UserListView(ListView):
+class ListUsersView(ListView):
     model = AppUser
     context_object_name = 'users'
     template_name = 'users/list.html'
 
 
-class UserCreateView(NotLoginRequiredMixin, SuccessMessageMixin, CreateView):
+class CreateUserView(NotLoginRequiredMixin, CreateView):
     form_class = UserCreateForm
     template_name = 'users/form.html'
     success_url = reverse_lazy('login')
@@ -42,8 +40,7 @@ class UserCreateView(NotLoginRequiredMixin, SuccessMessageMixin, CreateView):
         return response
 
 
-class UserUpdateView(LoginRequiredMixin,
-                     UserPassesTestOwnerMixin, UpdateView):
+class UpdateUserView(UserPassesTestOwnerMixin, UpdateView):
     model = AppUser
     form_class = UserUpdateForm
     template_name = 'users/form.html'
@@ -52,6 +49,11 @@ class UserUpdateView(LoginRequiredMixin,
         'title': _('Edit user'),
     }
     raise_exception = False
+
+    def handle_no_permission(self):
+        logger.error('Invalid action.')
+        messages.error(self.request, _('Invalid action.'))
+        return redirect(reverse_lazy('login'))
 
     def form_valid(self, form):
         logger.debug('User data updated.')
@@ -66,11 +68,15 @@ class UserUpdateView(LoginRequiredMixin,
         return response
 
 
-class UserDeleteView(LoginRequiredMixin,
-                     UserPassesTestOwnerMixin, DeleteView):
+class DeleteUserView(UserPassesTestOwnerMixin, DeleteView):
     model = AppUser
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users:list')
+
+    def handle_no_permission(self):
+        logger.error('Invalid action.')
+        messages.error(self.request, _('Invalid action.'))
+        return redirect(reverse_lazy('login'))
 
     def form_valid(self, form):
         logger.debug('User deleted.')

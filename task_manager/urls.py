@@ -14,5 +14,6 @@ urlpatterns = [
     path('logout/', UserLogoutView.as_view(), name='logout'),
     path('users/', include('task_manager.users.urls', namespace='users')),
     path('statuses/', include('task_manager.statuses.urls', namespace='statuses')),  # noqa: E501
+    path('tasks/', include('task_manager.tasks.urls', namespace='tasks')),
     prefix_default_language=False,
 )

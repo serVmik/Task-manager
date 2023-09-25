@@ -64,7 +64,7 @@ class ModelFormMessagesMixin(ModelFormMixin):
     Sets the text for log messages.
     Sets the text for flash messages.
 
-    Use it only in CreateView, UpdateView.
+    Use it only with CreateView, UpdateView.
     Overrides methods django.views.generic.edit.ModelFormMixin.
     """
 
@@ -89,13 +89,13 @@ class ModelFormDeleteMessagesMixin(DeleteView):
     Sets the text for log messages.
     Sets the text for flash messages.
 
-    Use it only in DeleteView.
+    Use it only with DeleteView.
     Overrides methods django.views.generic.DeleteView.
     """
 
     valid_message = ''
     invalid_message = ''
-    protection_message = ''
+    protection_message = ''     # unused
 
     def form_valid(self, form):
         response = super().form_valid(form)

@@ -31,7 +31,7 @@ class StatusesCrudTest(TestCase):
         created_status = {'name': 'created_status'}
         url_create = reverse('statuses:create')
 
-        """ Test create status by authenticated user """
+        """ Test create status by an authenticated user """
 
         self.client.force_login(user)
 

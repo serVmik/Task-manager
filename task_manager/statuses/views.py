@@ -61,5 +61,6 @@ class DeleteStatusView(
     model = Status
     template_name = 'statuses/delete.html'
     success_url = reverse_lazy('statuses:list')
+    protection_message = ''
     valid_message = _('Status successfully deleted')
     invalid_message = _('Error deleting status')

@@ -15,6 +15,24 @@ import logging
 logger = logging.getLogger('main_log')
 
 
+class UserPassesTestOwnerMixin(UserPassesTestMixin):
+    """
+    Test whether the user has owner permission.
+
+    Overrides methods django.contrib.auth.mixins.UserPassesTestMixin.
+    """
+
+    def test_func(self):
+        return self.get_object() == self.request.user
+
+    def handle_no_permission(self):
+        messages.error(
+            self.request,
+            _('Only the owner can edit and delete user.')
+        )
+        return redirect(reverse_lazy('users:list'))
+
+
 class NotLoginRequiredMixin(AccessMixin):
     """
     Verify that the current user is NOT authenticated.
@@ -30,7 +48,7 @@ class NotLoginRequiredMixin(AccessMixin):
 
 class HandleNoPermissionMixin(AccessMixin):
     """
-    Redirects the authenticated user.
+    Redirects the not authenticated user.
 
     Overrides method django.contrib.auth.mixins.AccessMixin.
     """
@@ -77,6 +95,7 @@ class ModelFormDeleteMessagesMixin(DeleteView):
 
     valid_message = ''
     invalid_message = ''
+    protection_message = ''
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -89,24 +108,6 @@ class ModelFormDeleteMessagesMixin(DeleteView):
         logger.error(self.invalid_message)
         messages.error(self.request, self.invalid_message)
         return response
-
-
-class UserPassesTestOwnerMixin(UserPassesTestMixin):
-    """
-    Test whether the user has owner permission.
-
-    Overrides methods django.contrib.auth.mixins.UserPassesTestMixin.
-    """
-
-    def test_func(self):
-        return self.get_object() == self.request.user
-
-    def handle_no_permission(self):
-        messages.error(
-            self.request,
-            _('Only the owner can edit and delete user.')
-        )
-        return redirect(reverse_lazy('users:list'))
 
 
 def test_flash_message(response, expected_message):

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load i18n django_bootstrap5 %}
+
+{% block content %}
+<!--======= Task Content =======-->
+<div class="card container p-4">
+  <h1>
+    {% block title %}
+    {{ title }}
+    {% endblock %}
+  </h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{{ title }}</button>
+  </form>
+</div><!-- End Task Content -->
+{% endblock %}

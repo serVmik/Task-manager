@@ -14,7 +14,7 @@ from task_manager.tasks.models import TaskModel
 from task_manager.tasks.forms import TaskForm
 
 
-class ListTaskView(ListView):
+class ListTasksView(ListView):
     model = TaskModel
     template_name = 'tasks/list.html'
     context_object_name = 'tasks'
@@ -27,7 +27,7 @@ class CreateTaskView(
     CreateView,
 ):
     form_class = TaskForm
-    template_name = 'tasks/create.html'
+    template_name = 'tasks/form.html'
     success_url = reverse_lazy('tasks:create')
     extra_context = {
         'title': _('Create Task'),

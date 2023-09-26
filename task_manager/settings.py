@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'task_manager.users',
     'task_manager.statuses',
     'task_manager.tasks',
+    'task_manager.labels',
 ]
 
 # https://docs.djangoproject.com/en/4.1/topics/i18n/translation/#how-django-discovers-language-preference

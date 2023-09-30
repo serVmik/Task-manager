@@ -10,12 +10,12 @@ from task_manager.mixins import (
     UserPassesTestOwnerMixin,
 )
 
-from task_manager.tasks.models import TaskModel
+from task_manager.tasks.models import Task
 from task_manager.tasks.forms import TaskForm
 
 
 class ListTasksView(ListView):
-    model = TaskModel
+    model = Task
     template_name = 'tasks/list.html'
     context_object_name = 'tasks'
 
@@ -42,6 +42,7 @@ class UpdateTaskView(
     LoginRequiredMixin,
     UpdateView,
 ):
+    model = Task
     form_class = TaskForm
     template_name = 'tasks/form.html'
     success_url = reverse_lazy('tasks:update')
@@ -58,7 +59,7 @@ class DeleteTaskView(
     UserPassesTestOwnerMixin,
     DeleteView,
 ):
-    model = TaskModel
+    model = Task
     template_name = 'tasks/delete.html'
     success_url = reverse_lazy('tasks:list')
     valid_message = _('Status successfully deleted')

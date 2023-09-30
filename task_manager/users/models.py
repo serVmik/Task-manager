@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.urls import reverse_lazy
 
 
-class AppUser(AbstractUser):
+class UserModel(AbstractUser):
 
     def __str__(self):
         return self.get_full_name()

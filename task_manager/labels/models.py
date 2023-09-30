@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse_lazy
 
 
-class LabelModel(models.Model):
+class Label(models.Model):
     name = models.CharField(
         max_length=127,
         unique=True,

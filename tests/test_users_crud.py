@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from task_manager.mixins import test_flash_message
 
-from task_manager.users.models import AppUser
+from task_manager.users.models import UserModel
 from task_manager.users.views import (
     CreateUserView,
     ListUsersView,
@@ -16,7 +16,7 @@ from task_manager.users.views import (
 class UserCrudTestCase(TestCase):
 
     def setUp(self):
-        AppUser.objects.create(
+        UserModel.objects.create(
             username='ivan_ivanov',
             first_name='Ivan',
             last_name='Ivanov',
@@ -33,7 +33,7 @@ class UserCrudTestCase(TestCase):
         }
 
         # test whether the current_user is authenticated
-        current_user = AppUser.objects.get(username='ivan_ivanov')
+        current_user = UserModel.objects.get(username='ivan_ivanov')
         self.client.force_login(current_user)
         response = self.client.get(url_create)
         self.assertEquals(response.status_code, 403)
@@ -55,13 +55,13 @@ class UserCrudTestCase(TestCase):
         test_flash_message(response, _('User is registered.'))
 
         # user create test
-        user = AppUser.objects.get(username='petr_petrov')
+        user = UserModel.objects.get(username='petr_petrov')
         self.assertEquals(user.get_full_name(), 'Petr Petrov')
         self.assertTrue(user.check_password('q1s2d3r4'))
 
     def test_read_users(self):
         url_list = reverse('users:list')
-        user = AppUser.objects.get(username='ivan_ivanov')
+        user = UserModel.objects.get(username='ivan_ivanov')
 
         # page test, method=get
         response = self.client.get(url_list)
@@ -78,7 +78,7 @@ class UserCrudTestCase(TestCase):
         self.assertInHTML(user.date_joined.strftime("%d-%m-%Y %H:%M"), html)
 
     def test_update_user(self):
-        old_user_data = AppUser.objects.get(username='ivan_ivanov')
+        old_user_data = UserModel.objects.get(username='ivan_ivanov')
         url_update = reverse('users:update', kwargs={'pk': old_user_data.pk})
         new_user_data = {
             'username': 'ivanov_daryin',
@@ -104,14 +104,14 @@ class UserCrudTestCase(TestCase):
         test_flash_message(response, _('User data updated.'))
 
         # user update test
-        [current_user_data] = AppUser.objects.filter(pk=old_user_data.pk).values()  # noqa: E501
+        [current_user_data] = UserModel.objects.filter(pk=old_user_data.pk).values()  # noqa: E501
         for key in ('username', 'first_name', 'last_name'):
             self.assertEquals(new_user_data[key], current_user_data[key])
-        current_user_data = AppUser.objects.get(pk=old_user_data.pk)
+        current_user_data = UserModel.objects.get(pk=old_user_data.pk)
         self.assertTrue(current_user_data.check_password('r4d3s2q1'))
 
     def test_delete_user(self):
-        user = AppUser.objects.get(username='ivan_ivanov')
+        user = UserModel.objects.get(username='ivan_ivanov')
         url_delete = reverse('users:delete', kwargs={'pk': user.pk})
         self.client.force_login(user)
 
@@ -130,4 +130,4 @@ class UserCrudTestCase(TestCase):
         test_flash_message(response, _('User deleted.'))
 
         # user deletion test
-        self.assertFalse(AppUser.objects.filter(username='ivan_ivanov').exists())  # noqa: E501
+        self.assertFalse(UserModel.objects.filter(username='ivan_ivanov').exists())  # noqa: E501

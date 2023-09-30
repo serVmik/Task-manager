@@ -9,12 +9,12 @@ from ..mixins import (
     ModelFormDeleteMessagesMixin,
     NotLoginRequiredMixin,
 )
-from .models import AppUser
+from .models import UserModel
 from .forms import UserCreateForm, UserUpdateForm
 
 
 class ListUsersView(ListView):
-    model = AppUser
+    model = UserModel
     context_object_name = 'users'
     template_name = 'users/list.html'
 
@@ -40,7 +40,7 @@ class UpdateUserView(
     UserPassesTestOwnerMixin,
     UpdateView
 ):
-    model = AppUser
+    model = UserModel
     form_class = UserUpdateForm
     template_name = 'users/form.html'
     success_url = reverse_lazy('users:list')
@@ -58,7 +58,7 @@ class DeleteUserView(
     ModelFormDeleteMessagesMixin,
     DeleteView
 ):
-    model = AppUser
+    model = UserModel
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users:list')
     valid_message = 'User deleted.'

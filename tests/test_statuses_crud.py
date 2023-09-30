@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from task_manager.mixins import test_flash_message
-from task_manager.users.models import AppUser
+from task_manager.users.models import UserModel
 
 from task_manager.statuses.models import Status
 from task_manager.statuses.views import (
@@ -17,7 +17,7 @@ from task_manager.statuses.views import (
 class StatusesCrudTest(TestCase):
 
     def setUp(self):
-        AppUser.objects.create(
+        UserModel.objects.create(
             username='ivan_ivanov',
             first_name='Ivan',
             last_name='Ivanov',
@@ -27,7 +27,7 @@ class StatusesCrudTest(TestCase):
         )
 
     def test_create_status(self):
-        user = AppUser.objects.get(username='ivan_ivanov')
+        user = UserModel.objects.get(username='ivan_ivanov')
         created_status = {'name': 'created_status'}
         url_create = reverse('statuses:create')
 
@@ -68,7 +68,7 @@ class StatusesCrudTest(TestCase):
     def test_read_statuses(self):
         url_reade = reverse('statuses:list')
         status = Status.objects.get(name='name_status')
-        user = AppUser.objects.get(username='ivan_ivanov')
+        user = UserModel.objects.get(username='ivan_ivanov')
         self.client.force_login(user)
 
         # page test, method=get
@@ -88,7 +88,7 @@ class StatusesCrudTest(TestCase):
         old_status = Status.objects.get(name='name_status')
         url_update = reverse('statuses:update', kwargs={'pk': old_status.pk})
         updated_status = {'name': 'updated_status'}
-        user = AppUser.objects.get(username='ivan_ivanov')
+        user = UserModel.objects.get(username='ivan_ivanov')
         self.client.force_login(user)
 
         # page test, method=get
@@ -112,7 +112,7 @@ class StatusesCrudTest(TestCase):
 
     def test_delete_status(self):
         status = Status.objects.get(name='name_status')
-        user = AppUser.objects.get(username='ivan_ivanov')
+        user = UserModel.objects.get(username='ivan_ivanov')
         url_delete = reverse('statuses:delete', kwargs={'pk': status.pk})
 
         """ Test delete status by authenticated user """

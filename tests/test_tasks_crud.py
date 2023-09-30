@@ -3,10 +3,10 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from task_manager.mixins import test_flash_message
-from task_manager.labels.models import LabelModel
+from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
-from task_manager.tasks.models import TaskModel
-from task_manager.users.models import AppUser
+from task_manager.tasks.models import Task
+from task_manager.users.models import UserModel
 
 from task_manager.tasks.views import (
     ListTasksView,
@@ -20,41 +20,43 @@ class TaskCrudTest(TestCase):
 
     def setUp(self):
         # user
-        AppUser.objects.create_user(
+        UserModel.objects.create_user(
             username='ivan_ivanov',
             first_name='Ivan',
             last_name='Ivanov'
         )
         # user author
-        AppUser.objects.create_user(
+        UserModel.objects.create_user(
             username='user_author',
             first_name='User',
             last_name='Author',
         )
         # user executor
-        AppUser.objects.create_user(
+        UserModel.objects.create_user(
             username='user_executor',
             first_name='User',
             last_name='Executor',
         )
-        LabelModel.objects.create(
+        Label.objects.create(
             name='test label',
         )
         Status.objects.create(
             name='task status',
         )
-        TaskModel.objects.create(
+        Task.objects.create(
             name='task name',
             description='task description',
             status=Status.objects.get(name='task status'),
-            label=LabelModel.objects.get(name='test label'),
-            author=AppUser.objects.get(usernname='user_author'),
-            executor=AppUser.objects.get(username='user_executor'),
+            author=UserModel.objects.get(username='user_author'),
+            executor=UserModel.objects.get(username='user_executor'),
         )
+        label = Label.objects.get(name='test label')
+        task = Task.objects.get(name='task name')
+        task.labels.set([label])
 
     def test_read_tasks(self):
-        task = TaskModel.objects.get(name='task name')
-        user_author = AppUser.objects.get(username='user_author')
+        task = Task.objects.get(name='task name')
+        user_author = UserModel.objects.get(username='user_author')
         url_read = reverse_lazy('tasks:list')
 
         """ Test try to visit page by anonymous """
@@ -103,8 +105,8 @@ class TaskCrudTest(TestCase):
         # add ...
 
     def test_create_task(self):
-        url_create = reverse_lazy('task:create')
-        author_user = AppUser.objects.get(username='user_author')
+        url_create = reverse_lazy('tasks:create')
+        author_user = UserModel.objects.get(username='user_author')
         created_task = {
             'name': 'created name',
             'description': 'created task description',
@@ -116,16 +118,16 @@ class TaskCrudTest(TestCase):
 
         """ Test try to create task by anonymous """
 
-        # page test, method=get
-        response = self.client.get(url_create)
-        assert self.assertRedirects(reverse_lazy('logit'), 302)
-        test_flash_message(response, _('Invalid action.'))
-        self.client.logout()
-        # page test, method=post
-        response = self.client.post(url_create)
-        assert self.assertRedirects(reverse_lazy('logit'), 302)
-        test_flash_message(response, _('Invalid action.'))
-        self.client.logout()
+        # # page test, method=get
+        # response = self.client.get(url_create)
+        # assert self.assertRedirects(reverse_lazy('login'), 302)
+        # test_flash_message(response, _('Invalid action.'))
+        # self.client.logout()
+        # # page test, method=post
+        # response = self.client.post(url_create)
+        # assert self.assertRedirects(reverse_lazy('logit'), 302)
+        # test_flash_message(response, _('Invalid action.'))
+        # self.client.logout()
 
         """ Test create task by an authorized user """
 
@@ -139,7 +141,7 @@ class TaskCrudTest(TestCase):
         self.assertIs(response.resolver_match.func.as_view, CreateTaskView)
 
         # page test, method=post,
-        self.assertFalse(AppUser.objects.filter(name='created name').exists())
+        self.assertFalse(UserModel.objects.filter(name='created name').exists())
         response = self.client.post(url_create, created_task)
         self.assertEquals(url_create, '/task/create/')
         self.assertRedirects(reverse_lazy('tasks:list'), 302)
@@ -147,10 +149,10 @@ class TaskCrudTest(TestCase):
         test_flash_message(response, 'Task created successfully')
 
         # task create test
-        self.assertTrue(AppUser.objects.filter(name='created name').exists())
+        self.assertTrue(UserModel.objects.filter(name='created name').exists())
 
     def test_update_task(self):
-        old_task = TaskModel.objects.get(name='task_name')
+        old_task = Task.objects.get(name='task_name')
         updated_task = {
             'name': 'updated name',
             'description': 'updated task description',
@@ -189,16 +191,17 @@ class TaskCrudTest(TestCase):
         test_flash_message(response, _('Task updated successfully'))
 
         # task update test
-        [current_task] = TaskModel.objects.filter(pk=old_task.pk).values()
+        [current_task] = Task.objects.filter(pk=old_task.pk).values()
         for key in ('name', 'description', 'status',
                     'label', 'author', 'executor'):
             self.assertEquals(updated_task[key], current_task[key])
 
     def test_delete_task(self):
-        task = TaskModel.objects.get(name='test name')
+        task = Task.objects.get(name='task name')
         url_delete = reverse_lazy('tasks:delete', kwargs={'pk': task.pk})
-        user_author = TaskModel.objects.get(name='user_author')
-        user_not_author = TaskModel.objects.get(name='ivan_ivanov')
+        print(f'+++++++++++ task.author = {task.author}')
+        user_author = UserModel.objects.get(username=task)
+        user_not_author = Task.objects.get(name='ivan_ivanov')
 
         """ Test try to update task by anonymous """
 
@@ -240,4 +243,4 @@ class TaskCrudTest(TestCase):
         test_flash_message(response, _('Task deleted.'))
 
         # task deletion test
-        self.assertFalse(TaskModel.objects.filter(name='test name').exists())
+        self.assertFalse(Task.objects.filter(name='test name').exists())

@@ -4,17 +4,18 @@
 
 {% block content %}
 <!--======= Tasks List Content =======-->
+<div class="card p-2">
 <h1>
   {% block title %}
   {% trans 'Tasks' %}
   {% endblock %}
 </h1>
 
-<a href="{% url 'tasks:create' %}">{% trans 'Create task' %}</a>
+<a href="{% url 'tasks:create' %}" class="pb-2">{% trans 'Create task' %}</a>
 
-<table>
+<table class="table table-striped table-hover table-info">
 
-  <thead>
+  <thead class="table-primary">
     <tr>
       <th>ID</th>
       <th>{% trans 'Name' %}</th>
@@ -29,7 +30,7 @@
   <tbody>
     {% for task in tasks %}
       <tr>
-        <td>{{ task.pk }}</td>
+        <td class="table-primary">{{ task.pk }}</td>
         <td>{{ task.name }}</td>
         <td>{{ task.status }}</td>
         <td>{{ task.author }}</td>
@@ -44,4 +45,5 @@
   </tbody>
 
 </table><!-- End Tasks List Content -->
+</div>
 {% endblock %}

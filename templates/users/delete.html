@@ -4,7 +4,7 @@
 
 {% block content %}
 <!--======= User Delete Content =======-->
-<div class="card container p-4">
+<div class="card p-4">
 <h1>
   {% block title %}
   {% trans 'Delete' %}
@@ -15,7 +15,7 @@
 <form method="post">
   {% csrf_token %}
   {% bootstrap_form form %}
-  <button type="submit">{% trans 'Yes, delete!' %}</button>
+  <button type="submit" class="btn btn-danger">{% trans 'Yes, delete!' %}</button>
 </form>
 </div><!-- End User Delete Content -->
 {% endblock %}

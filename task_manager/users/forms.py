@@ -1,12 +1,12 @@
 from django.contrib.auth.forms import UserCreationForm
 
-from task_manager.users.models import AppUser
+from task_manager.users.models import UserModel
 
 
 class UserCreateForm(UserCreationForm):
 
     class Meta:
-        model = AppUser
+        model = UserModel
         fields = ('first_name', 'last_name', 'username',
                   'password1', 'password2')
 

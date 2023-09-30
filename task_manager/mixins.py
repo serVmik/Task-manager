@@ -56,7 +56,7 @@ class HandleNoPermissionMixin(AccessMixin):
     def handle_no_permission(self):
         logger.error('Invalid action.')
         messages.error(self.request, _('Invalid action.'))
-        return redirect(reverse_lazy('login'))
+        return redirect(reverse_lazy('home'))
 
 
 class ModelFormMessagesMixin(ModelFormMixin):

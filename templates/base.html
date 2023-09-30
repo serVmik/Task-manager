@@ -11,13 +11,11 @@
   {% bootstrap_javascript %}
 </head>
 
-<body>
+<body class="container">
 {% include 'components/navigation.html' %}
-{% include 'components/messages.html' %}
+{% bootstrap_messages %}
 
-<div class="container">
-  {% block content %}{% endblock %}
-</div>
+{% block content %}{% endblock %}
 
 {% include 'components/footer.html' %}
 </body>

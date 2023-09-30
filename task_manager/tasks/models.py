@@ -1,34 +1,40 @@
 from django.db import models
 from django.urls import reverse_lazy
 
-from task_manager.labels.models import LabelModel
+from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
-from task_manager.users.models import AppUser
+from task_manager.users.models import UserModel
+from django.utils.translation import gettext_lazy as _
 
 
-class TaskModel(models.Model):
-    name = models.CharField(max_length=127, unique=True, blank=False)
+class Task(models.Model):
+    name = models.CharField(
+        max_length=127,
+        unique=True,
+        blank=False,
+        error_messages={
+            'unique': _('Such a task already exists!'),
+        },
+        help_text=_('<i>Input task name</i>'),
+        # db_column='task_name',
+    )
     description = models.TextField(blank=True)
     status = models.ForeignKey(Status, on_delete=models.PROTECT)
 
     labels = models.ManyToManyField(
-        LabelModel,
+        Label, related_name='labels',
         blank=True,
-        related_name='labels',
     )
 
     author = models.ForeignKey(
-        AppUser,
+        UserModel, related_name='author',
         on_delete=models.PROTECT,
         blank=False,
-        related_name='author',
     )
     executor = models.ForeignKey(
-        AppUser,
+        UserModel, related_name='executor',
         on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-        related_name='executor',
+        blank=True, null=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

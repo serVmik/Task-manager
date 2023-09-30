@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load i18n %}
+{% load i18n django_bootstrap5 %}
 
 {% block content %}
 <!--======= User Login Content =======-->
@@ -13,8 +13,8 @@
 
 <form method="post">
   {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">{% trans 'Login' %}</button>
+  {% bootstrap_form form %}
+  <button type="submit" class="btn btn-success">{% trans 'Login' %}</button>
 </form>
 </div><!-- End User Login Content -->
 {% endblock %}

@@ -14,3 +14,6 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
             log_record['level'] = log_record['level'].upper
         else:
             log_record['level'] = record.levelname
+
+        log_record['module'] = record.module
+        log_record['funcName'] = record.funcName

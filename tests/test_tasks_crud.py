@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -7,15 +9,15 @@ from task_manager.mixins import test_flash_message
 from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
 from task_manager.tasks.models import Task
-
 from task_manager.tasks.views import (
     ListTasksView,
     CreateTaskView,
-    # UpdateTaskView,
+    UpdateTaskView,
     # DeleteTaskView,
 )
 
 User = get_user_model()
+logger = logging.getLogger('main_log')
 
 
 class TaskCrudTest(TestCase):
@@ -32,6 +34,11 @@ class TaskCrudTest(TestCase):
             username='user_executor',
             first_name='User',
             last_name='Executor',
+        )
+        User.objects.create_user(
+            username='new_executor',
+            first_name='User_2',
+            last_name='Executor_2',
         )
         Label.objects.create(
             name='test_label',
@@ -64,7 +71,7 @@ class TaskCrudTest(TestCase):
 
     def test_read_tasks(self):
         task = Task.objects.filter(name='task_name').values()
-        user_author = User.objects.get(username='user_author')
+        author = User.objects.get(username='user_author')
         url = reverse('tasks:list')
 
         """ Test try to visit page by anonymous """
@@ -78,7 +85,7 @@ class TaskCrudTest(TestCase):
 
         """ Test visit to the page by an authorized user """
 
-        self.client.force_login(user_author)
+        self.client.force_login(author)
         response = self.client.get(url, *task)
         html = response.content.decode()
 
@@ -112,8 +119,8 @@ class TaskCrudTest(TestCase):
         # test page content filter !!!!!!!!!!!!!!!!!!
 
     def test_create_task(self):
-        url_create = reverse('tasks:create')
-        author_user = User.objects.get(username='user_author')
+        url = reverse('tasks:create')
+        author = User.objects.get(username='user_author')
 
         self.assertTrue(Status.objects.filter(name='name_status').exists()),
         self.assertTrue(User.objects.filter(username='user_executor').exists()),
@@ -127,13 +134,13 @@ class TaskCrudTest(TestCase):
         """ Test try to create task by anonymous """
 
         # page test, method=get
-        response = self.client.get(url_create)
+        response = self.client.get(url)
         self.assertEquals(response.status_code, 302)
         # assert self.assertRedirects(response, reverse('home'), 302)
         test_flash_message(response, _('Invalid action.'))
         self.client.logout()
         # page test, method=post
-        response = self.client.post(url_create)
+        response = self.client.post(url)
         self.assertEquals(response.status_code, 302)
         # assert self.assertRedirects(response, reverse('home'), 302)
         test_flash_message(response, _('Invalid action.'))
@@ -141,71 +148,95 @@ class TaskCrudTest(TestCase):
 
         """ Test create task by an authorized user """
 
-        self.client.force_login(author_user)
+        self.client.force_login(author)
 
         # page test, method=get
-        response = self.client.get(url_create)
+        response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
-        self.assertEquals(url_create, '/tasks/create/')
+        self.assertEquals(url, '/tasks/create/')
         self.assertTemplateUsed(response, 'tasks/form.html')
         self.assertIs(response.resolver_match.func.view_class, CreateTaskView)
 
         # page test, method=post,
 
         self.assertFalse(Task.objects.filter(name='created task').exists())
-        response = self.client.post(url_create, created_task)
+        response = self.client.post(url, created_task)
         self.assertTrue(Task.objects.filter(name='created task').exists())
 
-        self.assertEquals(url_create, '/tasks/create/')
+        self.assertEquals(url, '/tasks/create/')
         self.assertRedirects(response, reverse('tasks:list'), 302)
         self.assertIs(response.resolver_match.func.view_class, CreateTaskView)
         test_flash_message(response, 'Task added successfully')
 
-    # def test_update_task(self):
-    #     old_task = Task.objects.get(name='task_name')
-    #     updated_task = {
-    #         'name': 'updated name',
-    #         'description': 'updated task description',
-    #         'status': 'updated task status',
-    #         'label': 'updated test label',
-    #         'author': 'updated user_author',
-    #         'executor': 'updated user_executor',
-    #     }
-    #     url_update = reverse_lazy('tasks:update', kwargs={'pk', old_task.pk})
-    #
-    #     """ Test try to update task by anonymous """
-    #
-    #     response = self.client.get(url_update)
-    #     self.assertRedirects(reverse_lazy('login'), 302)
-    #     test_flash_message(response, _('Invalid action.'))
-    #     self.client.logout()
-    #     response = self.client.post(url_update)
-    #     self.assertRedirects(reverse_lazy('login'), 302)
-    #     test_flash_message(response, _('Invalid action.'))
-    #     self.client.logout()
-    #
-    #     """ Test create task by an authorized user """
-    #
-    #     # page test, method=get
-    #     response = self.client.get(url_update)
-    #     self.assertEquals(response.status_code, 200)
-    #     self.assertEquals(url_update, f'/tasks/{old_task.pk}/update/')
-    #     self.assertTemplateUsed(response, 'tasks/form.html')
-    #     self.assertIs(response.resolver_match.func.view_class, UpdateTaskView)
-    #
-    #     # page test, method=post
-    #     response = self.client.post(url_update, updated_task)
-    #     self.assertEquals(url_update, f'/tasks/{old_task.pk}/update/')
-    #     self.assertRedirects(response, reverse_lazy('tasks:list'), 302)
-    #     self.assertIs(response.resolver_match.func.view_class, UpdateTaskView)
-    #     test_flash_message(response, _('Task updated successfully'))
-    #
-    #     # task update test
-    #     [current_task] = Task.objects.filter(pk=old_task.pk).values()
-    #     for key in ('name', 'description', 'status',
-    #                 'label', 'author', 'executor'):
-    #         self.assertEquals(updated_task[key], current_task[key])
-    #
+    def test_update_task(self):
+        author = User.objects.get(username='user_author')
+        new_executor = User.objects.get(username='new_executor')
+        old_task = Task.objects.get(name='task_name')
+        new_status = Status.objects.get(name='test create')
+        updated_data = {
+            'name': 'updated name',
+            'description': 'updated task description',
+            'status': new_status.pk,
+            # 'labels': 'updated test label',
+            'author': author.pk,
+            'executor': new_executor.pk,
+        }
+        url = reverse('tasks:update', kwargs={'pk': old_task.pk})
+
+        """ Test try to update task by anonymous """
+
+        response = self.client.get(url)
+        self.assertRedirects(response, reverse('home'), 302)
+        test_flash_message(response, _('Invalid action.'))
+        self.client.logout()
+        response = self.client.post(url)
+        self.assertRedirects(response, reverse('home'), 302)
+        test_flash_message(response, _('Invalid action.'))
+        self.client.logout()
+
+        """ Test update task by an authorized user """
+
+        self.client.force_login(author)
+
+        # page test, method=get
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(url, f'/tasks/{old_task.pk}/update/')
+        self.assertTemplateUsed(response, 'tasks/form.html')
+        self.assertIs(response.resolver_match.func.view_class, UpdateTaskView)
+
+        # page test, method=post
+        response = self.client.post(url, updated_data)
+        self.assertEquals(url, f'/tasks/{old_task.pk}/update/')
+        self.assertRedirects(response, reverse('tasks:list'), 302)
+        self.assertIs(response.resolver_match.func.view_class, UpdateTaskView)
+        test_flash_message(response, _('Task successfully updated'))
+        self.client.logout()
+
+        # task update test
+        [current_data] = Task.objects.filter(pk=old_task.pk).values()
+        for field1, field2 in [
+            ('name', 'name'),
+            ('description', 'description'),
+            ('status', 'status_id'),
+            # ('labels', 'labels_id'),
+            ('author', 'author_id'),
+            ('executor', 'executor_id'),
+        ]:
+            self.assertEquals(updated_data[field1], current_data[field2])
+
+        """ Task update with error """
+
+        updated_data_error = {
+            'name': 'updated name',
+            'description': 'updated task description',
+            'status': new_status,
+        }
+        self.client.force_login(author)
+        response = self.client.post(url, updated_data_error)
+        self.assertEquals(response.status_code, 200)
+        test_flash_message(response, 'Task update error')
+
     # def test_delete_task(self):
     #     task = Task.objects.get(name='task name')
     #     url_delete = reverse_lazy('tasks:delete', kwargs={'pk': task.pk})

@@ -1,7 +1,7 @@
 {% load i18n %}
 
 <!--======== Navigation =======-->
-<nav class="pb-4">
+<nav class="pb-4 pt-1">
   <ul class="nav nav-tabs">
 
     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">{% trans 'Task manager' %}</a></li>
@@ -15,9 +15,11 @@
 
     {% if user.is_authenticated %}
       <li class="nav-item"><a class="nav-link disabled" href="#">{{ user.username }}</a></li>
+      <li><p class="nav-link disabled">|</p></li>
       <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
     {% else %}
       <li class="nav-item"><a class="nav-link" href="{% url 'users:create' %}">{% trans 'Registration' %}</a></li>
+      <li><p class="nav-link disabled">|</p></li>
       <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">{% trans 'Login' %}</a></li>
     {% endif %}
 

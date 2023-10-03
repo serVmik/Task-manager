@@ -1,0 +1,42 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "first_name": "Oleg",
+      "last_name": "Popov",
+      "username": "author",
+      "password": "q1s2d3r4"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+    "first_name": "Dima",
+    "last_name": "Serov",
+    "username": "not_author",
+    "password": "q1s2d3r4"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+    "first_name": "Mila",
+    "last_name": "Ivanova",
+    "username": "executor",
+    "password": "q1s2d3r4"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 4,
+    "fields": {
+    "first_name": "Anton",
+    "last_name": "Dobrov",
+    "username": "new_executor",
+    "password": "q1s2d3r4"
+    }
+  }
+]

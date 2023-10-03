@@ -1,0 +1,23 @@
+[
+  {
+    "model": "labels.tasklabels",
+    "pk": 1,
+    "fields": {
+      "name": "important"
+    }
+  },
+  {
+    "model": "labels.tasklabels",
+    "pk": 2,
+    "fields": {
+      "name": "doesn't matter"
+    }
+  },
+  {
+    "model": "labels.tasklabels",
+    "pk": 3,
+    "fields": {
+      "name": "urgently"
+    }
+  }
+]

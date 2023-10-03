@@ -2,15 +2,14 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
-from ..mixins import (
-    HandleNoPermissionMixin,
-    UserPassesTestOwnerMixin,
-    ModelFormMessagesMixin,
-    ModelFormDeleteMessagesMixin,
-    NotLoginRequiredMixin,
-)
-from .models import UserModel
 from .forms import UserCreateForm, UserUpdateForm
+from .models import UserModel
+from ..mixins import (
+    NotLoginRequiredMixin,
+    HandleNoPermissionMixin,
+    OwnerUserPassesTestMixin,
+    ModelFormMessagesMixin,
+)
 
 
 class ListUsersView(ListView):
@@ -20,8 +19,9 @@ class ListUsersView(ListView):
 
 
 class CreateUserView(
-    ModelFormMessagesMixin,
+    HandleNoPermissionMixin,
     NotLoginRequiredMixin,
+    ModelFormMessagesMixin,
     CreateView,
 ):
     form_class = UserCreateForm
@@ -30,15 +30,17 @@ class CreateUserView(
     extra_context = {
         'title': _('Registration'),
     }
-    valid_message = 'User is registered.'
-    invalid_message = 'User registration error.'
+    success_message = 'User is registered.'
+    error_message = 'User registration error.'
+    message_no_permission = 'You are already logged in!'
+    url_no_permission = reverse_lazy('users:list')
 
 
 class UpdateUserView(
     HandleNoPermissionMixin,
+    OwnerUserPassesTestMixin,
     ModelFormMessagesMixin,
-    UserPassesTestOwnerMixin,
-    UpdateView
+    UpdateView,
 ):
     model = UserModel
     form_class = UserUpdateForm
@@ -47,19 +49,18 @@ class UpdateUserView(
     extra_context = {
         'title': _('Edit user'),
     }
-    raise_exception = False
-    valid_message = 'User data updated.'
-    invalid_message = 'User update error.'
+    success_message = 'User data updated.'
+    error_message = 'User update error.'
 
 
 class DeleteUserView(
     HandleNoPermissionMixin,
-    UserPassesTestOwnerMixin,
-    ModelFormDeleteMessagesMixin,
-    DeleteView
+    OwnerUserPassesTestMixin,
+    ModelFormMessagesMixin,
+    DeleteView,
 ):
     model = UserModel
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users:list')
-    valid_message = 'User deleted.'
-    invalid_message = 'User deletion error.'
+    success_message = 'User deleted.'
+    error_message = 'User deletion error.'

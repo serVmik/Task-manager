@@ -6,23 +6,26 @@ from django.utils.translation import gettext_lazy as _
 from task_manager.mixins import (
     HandleNoPermissionMixin,
     ModelFormMessagesMixin,
-    ModelFormDeleteMessagesMixin,
 )
 
 from task_manager.statuses.forms import StatusForm
 from task_manager.statuses.models import Status
 
 
-class ListStatusesView(HandleNoPermissionMixin, LoginRequiredMixin, ListView):
+class ListStatusesView(
+    HandleNoPermissionMixin,
+    LoginRequiredMixin,
+    ListView,
+):
     model = Status
     context_object_name = 'statuses'
     template_name = 'statuses/list.html'
 
 
 class CreateStatusView(
-    ModelFormMessagesMixin,
     HandleNoPermissionMixin,
     LoginRequiredMixin,
+    ModelFormMessagesMixin,
     CreateView,
 ):
     form_class = StatusForm
@@ -31,14 +34,14 @@ class CreateStatusView(
     extra_context = {
         'title': _('Create status')
     }
-    valid_message = _('Status successfully created')
-    invalid_message = _('Error creating status')
+    success_message = _('Status successfully created')
+    error_message = _('Error creating status')
 
 
 class UpdateStatusView(
-    ModelFormMessagesMixin,
     HandleNoPermissionMixin,
     LoginRequiredMixin,
+    ModelFormMessagesMixin,
     UpdateView,
 ):
     model = Status
@@ -48,19 +51,20 @@ class UpdateStatusView(
     extra_context = {
         'title': _('Edit status')
     }
-    valid_message = _('Status updated successfully')
-    invalid_message = _('Status update error')
+    success_message = _('Status updated successfully')
+    error_message = _('Status update error')
 
 
 class DeleteStatusView(
-    ModelFormDeleteMessagesMixin,
     HandleNoPermissionMixin,
     LoginRequiredMixin,
+    ModelFormMessagesMixin,
     DeleteView
 ):
     model = Status
     template_name = 'statuses/delete.html'
     success_url = reverse_lazy('statuses:list')
     protection_message = ''
-    valid_message = _('Status successfully deleted')
-    invalid_message = _('Error deleting status')
+    success_message = _('Status successfully deleted')
+    error_message = _('Error deleting status')
+    message_no_permission = _('Only the author can delete status')

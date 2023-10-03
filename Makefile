@@ -16,7 +16,7 @@ test:
 	@$(MANAGE) test tests
 
 test-dev:
-	@$(MANAGE) test tests.test_users_crud
+	@$(MANAGE) test tests.test_tasks_crud
 
 test-coverage:
 	poetry run coverage run --source="task_manager" manage.py test task_manager

@@ -1,12 +1,18 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from .models import Label
 from .forms import LabelForm
+from ..mixins import HandleNoPermissionMixin
 
 
-class ListLabelsView(ListView):
+class ListLabelsView(
+    HandleNoPermissionMixin,
+    LoginRequiredMixin,
+    ListView,
+):
     model = Label
     template_name = 'labels/list.html'
     context_object_name = 'labels'

@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from task_manager.mixins import test_flash_message
+from tests.tests_func import flash_message_test
 from task_manager.users.forms import UserCreateForm, UserUpdateForm
 from task_manager.users.views import (CreateUserView, ListUsersView,
                                       UpdateUserView, DeleteUserView,)
@@ -38,8 +38,8 @@ class UserCrudTestCase(TestCase):
         current_user = User.objects.get(username='ivan_ivanov')
         self.client.force_login(current_user)
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 403)
-        test_flash_message(response, _('Invalid action.'))
+        self.assertEquals(response.status_code, 302)
+        flash_message_test(response, _('You are already logged in!'))
         self.client.logout()
 
         # page test, method=get
@@ -55,7 +55,7 @@ class UserCrudTestCase(TestCase):
         self.assertEquals(url, '/users/create/')
         self.assertRedirects(response, reverse('login'), 302)
         self.assertIs(response.resolver_match.func.view_class, CreateUserView)
-        test_flash_message(response, _('User is registered.'))
+        flash_message_test(response, _('User is registered.'))
 
         # user create test
         user = User.objects.get(username='petr_petrov')
@@ -108,7 +108,7 @@ class UserCrudTestCase(TestCase):
         self.assertEquals(url, f'/users/{old_user_data.pk}/update/')
         self.assertRedirects(response, reverse('users:list'), 302)
         self.assertIs(response.resolver_match.func.view_class, UpdateUserView)
-        test_flash_message(response, _('User data updated.'))
+        flash_message_test(response, _('User data updated.'))
 
         # user update test
         [current_user_data] = User.objects.filter(pk=old_user_data.pk).values()
@@ -135,7 +135,7 @@ class UserCrudTestCase(TestCase):
         self.assertEquals(url, f'/users/{user.pk}/delete/')
         self.assertRedirects(response, reverse('users:list'), 302)
         self.assertIs(response.resolver_match.func.view_class, DeleteUserView)
-        test_flash_message(response, _('User deleted.'))
+        flash_message_test(response, _('User deleted.'))
 
         # user deletion test
         self.assertFalse(User.objects.filter(username='ivan_ivanov').exists())

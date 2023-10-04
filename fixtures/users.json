@@ -1,6 +1,6 @@
 [
   {
-    "model": "users.user",
+    "model": "users.UserModel",
     "pk": 1,
     "fields": {
       "first_name": "Oleg",
@@ -10,33 +10,33 @@
     }
   },
   {
-    "model": "users.user",
+    "model": "users.UserModel",
     "pk": 2,
     "fields": {
-    "first_name": "Dima",
-    "last_name": "Serov",
-    "username": "not_author",
-    "password": "q1s2d3r4"
-    }
+      "first_name": "Dima",
+      "last_name": "Serov",
+      "username": "not_author",
+      "password": "q1s2d3r4"
+      }
   },
   {
-    "model": "users.user",
+    "model": "users.UserModel",
     "pk": 3,
     "fields": {
-    "first_name": "Mila",
-    "last_name": "Ivanova",
-    "username": "executor",
-    "password": "q1s2d3r4"
+      "first_name": "Mila",
+      "last_name": "Ivanova",
+      "username": "executor",
+      "password": "q1s2d3r4"
     }
   },
   {
-    "model": "users.user",
+    "model": "users.UserModel",
     "pk": 4,
-    "fields": {
-    "first_name": "Anton",
-    "last_name": "Dobrov",
-    "username": "new_executor",
-    "password": "q1s2d3r4"
+      "fields": {
+      "first_name": "Anton",
+      "last_name": "Dobrov",
+      "username": "new_executor",
+      "password": "q1s2d3r4"
     }
   }
 ]

@@ -1,17 +1,15 @@
-import logging
-
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from task_manager.mixins import (
-    ModelFormMessagesMixin, HandleNoPermissionMixin, AuthorshipTaskCheckMixin,
+    AddMessagesToFormSubmissionMixin,
+    AuthorshipTaskCheckMixin,
+    HandleNoPermissionMixin,
 )
 from task_manager.tasks.models import Task
 from task_manager.tasks.forms import TaskForm
-
-logger = logging.getLogger('main_log')
 
 
 class ListTasksView(
@@ -22,14 +20,14 @@ class ListTasksView(
     model = Task
     template_name = 'tasks/list.html'
     context_object_name = 'tasks'
-    message_no_permission = 'You are not authorized'
-    logger_no_permission = 'The action was taken by an unauthorized user'
+    message_no_permission = _('You are not authorized')
+    logger_no_permission = _('The action was taken by an unauthorized user')
 
 
 class CreateTaskView(
     HandleNoPermissionMixin,
+    AddMessagesToFormSubmissionMixin,
     LoginRequiredMixin,
-    ModelFormMessagesMixin,
     CreateView,
 ):
     form_class = TaskForm
@@ -38,10 +36,10 @@ class CreateTaskView(
     extra_context = {
         'title': _('Create Task'),
     }
-    message_no_permission = 'You are not authorized'
-    logger_no_permission = 'The action was taken by an unauthorized user'
     success_message = 'Task added successfully'
     error_message = 'Error adding task'
+    message_no_permission = 'You are not authorized'
+    logger_no_permission = 'The action was taken by an unauthorized user'
 
     def form_valid(self, form):
         """Add current user on author field Task model."""
@@ -51,8 +49,8 @@ class CreateTaskView(
 
 class UpdateTaskView(
     HandleNoPermissionMixin,
+    AddMessagesToFormSubmissionMixin,
     LoginRequiredMixin,
-    ModelFormMessagesMixin,
     UpdateView,
 ):
     model = Task
@@ -70,12 +68,12 @@ class UpdateTaskView(
 
 class DeleteTaskView(
     HandleNoPermissionMixin,
+    LoginRequiredMixin,
     AuthorshipTaskCheckMixin,
-    ModelFormMessagesMixin,
+    AddMessagesToFormSubmissionMixin,
     DeleteView,
 ):
     model = Task
     template_name = 'tasks/delete.html'
     success_url = reverse_lazy('tasks:list')
     success_message = 'The task was successfully deleted'
-    message_no_permission = 'Only the author can delete task'

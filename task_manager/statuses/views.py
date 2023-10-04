@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from task_manager.mixins import (
     HandleNoPermissionMixin,
-    ModelFormMessagesMixin,
+    AddMessagesToFormSubmissionMixin,
 )
 
 from task_manager.statuses.forms import StatusForm
@@ -25,7 +25,7 @@ class ListStatusesView(
 class CreateStatusView(
     HandleNoPermissionMixin,
     LoginRequiredMixin,
-    ModelFormMessagesMixin,
+    AddMessagesToFormSubmissionMixin,
     CreateView,
 ):
     form_class = StatusForm
@@ -34,6 +34,7 @@ class CreateStatusView(
     extra_context = {
         'title': _('Create status')
     }
+    message_no_permission = _('Invalid action')
     success_message = _('Status successfully created')
     error_message = _('Error creating status')
 
@@ -41,7 +42,7 @@ class CreateStatusView(
 class UpdateStatusView(
     HandleNoPermissionMixin,
     LoginRequiredMixin,
-    ModelFormMessagesMixin,
+    AddMessagesToFormSubmissionMixin,
     UpdateView,
 ):
     model = Status
@@ -58,7 +59,7 @@ class UpdateStatusView(
 class DeleteStatusView(
     HandleNoPermissionMixin,
     LoginRequiredMixin,
-    ModelFormMessagesMixin,
+    AddMessagesToFormSubmissionMixin,
     DeleteView
 ):
     model = Status

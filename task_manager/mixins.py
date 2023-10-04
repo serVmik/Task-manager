@@ -1,7 +1,7 @@
 import logging
 
 from django.contrib import messages
-from django.contrib.auth.mixins import AccessMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 logger = logging.getLogger('main_log')
 
 
-class NotLoginRequiredMixin(AccessMixin):
+class NotLoginRequiredMixin:
     """Verify that the current user is NOT authenticated."""
 
     def dispatch(self, request, *args, **kwargs):
@@ -23,7 +23,7 @@ class HandleNoPermissionMixin:
     Set redirect url and messages,
     if the user is not authenticated or does not have permission.
     """
-    message_no_permission = 'Invalid action'
+    message_no_permission = 'You are not authorized'
     logger_no_permission = message_no_permission
     url_no_permission = reverse_lazy('login')
 
@@ -33,14 +33,14 @@ class HandleNoPermissionMixin:
         return redirect(self.url_no_permission)
 
 
-class OwnerUserPassesTestMixin(UserPassesTestMixin):
-    """Check if the user has owner permission."""
+class CheckUserForOwnershipAccountMixin(UserPassesTestMixin):
+    """Check if the user has owner permission on account."""
 
-    def owner_check(self):
+    def check_user_for_ownership(self):
         return self.get_object() == self.request.user
 
     def get_test_func(self):
-        return self.owner_check
+        return self.check_user_for_ownership
 
 
 class AuthorshipTaskCheckMixin(UserPassesTestMixin):
@@ -55,7 +55,7 @@ class AuthorshipTaskCheckMixin(UserPassesTestMixin):
         return self.authorship_check
 
 
-class ModelFormMessagesMixin:
+class AddMessagesToFormSubmissionMixin:
     """Add a log and a flash messages on form submission."""
 
     success_message = ''

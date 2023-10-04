@@ -7,8 +7,8 @@ from .models import UserModel
 from ..mixins import (
     NotLoginRequiredMixin,
     HandleNoPermissionMixin,
-    OwnerUserPassesTestMixin,
-    ModelFormMessagesMixin,
+    CheckUserForOwnershipAccountMixin,
+    AddMessagesToFormSubmissionMixin,
 )
 
 
@@ -21,7 +21,7 @@ class ListUsersView(ListView):
 class CreateUserView(
     HandleNoPermissionMixin,
     NotLoginRequiredMixin,
-    ModelFormMessagesMixin,
+    AddMessagesToFormSubmissionMixin,
     CreateView,
 ):
     form_class = UserCreateForm
@@ -30,16 +30,16 @@ class CreateUserView(
     extra_context = {
         'title': _('Registration'),
     }
-    success_message = 'User is registered.'
-    error_message = 'User registration error.'
+    success_message = 'User is registered'
+    error_message = 'User registration error'
     message_no_permission = 'You are already logged in!'
     url_no_permission = reverse_lazy('users:list')
 
 
 class UpdateUserView(
     HandleNoPermissionMixin,
-    OwnerUserPassesTestMixin,
-    ModelFormMessagesMixin,
+    CheckUserForOwnershipAccountMixin,
+    AddMessagesToFormSubmissionMixin,
     UpdateView,
 ):
     model = UserModel
@@ -49,14 +49,16 @@ class UpdateUserView(
     extra_context = {
         'title': _('Edit user'),
     }
-    success_message = 'User data updated.'
-    error_message = 'User update error.'
+    success_message = 'User data updated'
+    error_message = 'User update error'
+    message_no_permission = 'Only the owner can update users data'
+    url_no_permission = reverse_lazy('users:list')
 
 
 class DeleteUserView(
     HandleNoPermissionMixin,
-    OwnerUserPassesTestMixin,
-    ModelFormMessagesMixin,
+    CheckUserForOwnershipAccountMixin,
+    AddMessagesToFormSubmissionMixin,
     DeleteView,
 ):
     model = UserModel

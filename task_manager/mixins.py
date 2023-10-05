@@ -43,13 +43,24 @@ class CheckUserForOwnershipAccountMixin(UserPassesTestMixin):
         return self.check_user_for_ownership
 
 
-class AuthorshipTaskCheckMixin(UserPassesTestMixin):
+class CheckAuthorshipTaskMixin(UserPassesTestMixin):
     """Check current user for authorship of task."""
 
     def authorship_check(self):
         author_pk = self.get_object().author.pk
         current_user_pk = self.request.user.pk
-        return author_pk == current_user_pk
+        self.logger_no_permission = self.message_no_permission
+
+        if not self.request.user.is_authenticated:
+            self.message_no_permission = 'You are not authorized'
+            self.url_no_permission = reverse_lazy('login')
+            return False
+        elif author_pk == current_user_pk:
+            return True
+        elif author_pk != current_user_pk:
+            self.message_no_permission = 'Only the author can delete task'
+            self.url_no_permission = reverse_lazy('tasks:list')
+            return False
 
     def get_test_func(self):
         return self.authorship_check

@@ -140,9 +140,26 @@ class TestUpdateUser(TestCase):
         flash_message_test(response, 'Only the owner can update users data')
 
 
-#     def test_delete_user(self):
-#         user = User.objects.get(username='ivan_ivanov')
-#         url = reverse('users:delete', kwargs={'pk': user.pk})
+class TestDeleteUser(TestCase):
+    fixtures = ['users.json', 'statuses.json', 'labels.json', 'tasks.json']
+
+    def setUp(self):
+        self.user = User.objects.get(username='author')
+        self.not_author = User.objects.get(username='not_author')
+        self.url = reverse('users:delete', kwargs={'pk': self.user.pk})
+
+    def test_delete_user_by_anonymous(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(response, reverse('login'), 302)
+        flash_message_test(response, _('You are not authorized'))
+        self.assertTrue(User.objects.filter(username='author').exists())
+
+    # def test_delete_user_by_not_owner(self):
+    #     self.client.force_login(self.not_author)
+    #     response = self.client.get(self.url)
+    #     self.assertRedirects(response, reverse('users:list'), 302)
+    #     flash_message_test(response, _('Only the owner can delete account'))
+
 #
 #         self.client.force_login(user)
 #

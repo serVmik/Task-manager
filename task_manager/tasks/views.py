@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from task_manager.mixins import (
     AddMessagesToFormSubmissionMixin,
-    AuthorshipTaskCheckMixin,
+    CheckAuthorshipTaskMixin,
     HandleNoPermissionMixin,
 )
 from task_manager.tasks.models import Task
@@ -49,8 +49,8 @@ class CreateTaskView(
 
 class UpdateTaskView(
     HandleNoPermissionMixin,
-    AddMessagesToFormSubmissionMixin,
     LoginRequiredMixin,
+    AddMessagesToFormSubmissionMixin,
     UpdateView,
 ):
     model = Task
@@ -68,8 +68,7 @@ class UpdateTaskView(
 
 class DeleteTaskView(
     HandleNoPermissionMixin,
-    LoginRequiredMixin,
-    AuthorshipTaskCheckMixin,
+    CheckAuthorshipTaskMixin,
     AddMessagesToFormSubmissionMixin,
     DeleteView,
 ):

@@ -113,5 +113,6 @@ class RedirectForModelObjectDeleteErrorMixin:
         try:
             return super().post(request, *args, **kwargs)
         except ProtectedError:
+            logger.error(self.protected_message)
             messages.error(request, self.protected_message)
             return redirect(self.protected_redirect_url)

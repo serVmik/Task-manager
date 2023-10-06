@@ -161,6 +161,10 @@ class TestDeleteUser(TestCase):
         self.assertTrue(User.objects.filter(username='author').exists())
 
     def test_delete_user_by_owner_protected(self):
+        """
+        Test for successful protection against deletion
+        of a user participating in tasks.
+        """
         # method=get
         self.client.force_login(self.author)
         response = self.client.get(self.url)
@@ -170,12 +174,12 @@ class TestDeleteUser(TestCase):
 
         # method=post
         response = self.client.post(self.url)
-        self.assertTrue(User.objects.filter(username='author').exists())
         self.assertRedirects(response, reverse('users:list'), 302)
         flash_message_test(
             response,
             _('Cannot delete user because it is in use')
         )
+        self.assertTrue(User.objects.filter(username='author').exists())
 
     def test_delete_user_success(self):
         """

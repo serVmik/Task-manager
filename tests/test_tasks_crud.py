@@ -84,7 +84,6 @@ class CreateTaskTest(TestCase):
     def test_create_task_by_anonymous(self):
         response = self.client.post(self.url)
 
-        self.assertEquals(response.status_code, 302)
         self.assertRedirects(response, reverse('login'), 302)
         flash_message_test(response, _('You are not authorized'))
 

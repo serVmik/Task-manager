@@ -102,17 +102,15 @@ class AddMessagesToFormSubmissionMixin:
 
 class ProtectUserFromDeletionIfUserUsingMixin:
     """
-    Add a refusal to delete a model object
-    if this object is used in another model.
-    Add a protected_message about protecting an object from deletion.
-    Add a protected_redirect_url in case of refusal.
+    Add a refusal to delete a User model object
+    if this object is used in other model.
     """
     protected_message = 'Cannot delete object because it is in use'
     protected_redirect_url = 'home'
 
     def check_object_for_use(self, request):
         """
-        Check model object for use in another models.
+        Check the User model object for use in other models.
         Add a protected_message about protecting an object from deletion.
         """
         is_use = False

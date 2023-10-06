@@ -4,6 +4,9 @@ on:
   - push
   - pull_request
 
+env:
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,7 +26,12 @@ jobs:
           make install
 
       - name: Run linter
-        run: make lint
+        run: |
+          make lint
+
+      - name: Run tests
+        run: |
+          make test
 
 #        # Run pytest via: make test-coverage.
 #        # Publishing code test on Code Climate.

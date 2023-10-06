@@ -2,6 +2,7 @@ import logging
 
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.db.models import ProtectedError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -11,7 +12,7 @@ logger = logging.getLogger('main_log')
 
 class NotLoginRequiredMixin:
     """
-    Verify that the current user is NOT authenticated.
+    Verify that the current user is not authenticated.
     """
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -21,8 +22,8 @@ class NotLoginRequiredMixin:
 
 class HandleNoPermissionMixin:
     """
-    Set redirect url and messages,
-    if the user is not authenticated or does not have permission.
+    Add a redirect url and a messages,
+    if the user doesn't have permission.
     """
     message_no_permission = 'You are not authorized'
     logger_no_permission = message_no_permission
@@ -100,35 +101,17 @@ class AddMessagesToFormSubmissionMixin:
         return response
 
 
-class ProtectUserFromDeletionIfUserUsingMixin:
+class RedirectForModelObjectDeleteErrorMixin:
     """
-    Add a refusal to delete a User model object
-    if this object is used in other model.
+    Add protected_redirect_url when raise ProtectedError.
+    Add protected_message when raise ProtectedError.
     """
-    protected_message = 'Cannot delete object because it is in use'
     protected_redirect_url = 'home'
-
-    def check_object_for_use(self, request):
-        """
-        Check the User model object for use in other models.
-        Add a protected_message about protecting an object from deletion.
-        """
-        is_use = False
-
-        if self.get_object().author.count():
-            is_use = True
-        elif self.get_object().executor.count():
-            is_use = True
-
-        if is_use:
-            messages.error(request, self.protected_message)
-
-        return is_use
+    protected_message = 'Cannot delete object because it is in use'
 
     def post(self, request, *args, **kwargs):
-        """
-        Add a protected_redirect_url in case of refusal.
-        """
-        if self.check_object_for_use(request):
+        try:
+            return super().post(request, *args, **kwargs)
+        except ProtectedError:
+            messages.error(request, self.protected_message)
             return redirect(self.protected_redirect_url)
-        return super().post(request, *args, **kwargs)

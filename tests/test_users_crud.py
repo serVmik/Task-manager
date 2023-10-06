@@ -160,7 +160,7 @@ class TestDeleteUser(TestCase):
         flash_message_test(response, _('Only the owner can delete account'))
         self.assertTrue(User.objects.filter(username='author').exists())
 
-    def test_delete_user_by_owner_protected(self):
+    def test_delete_user_protected_error(self):
         """
         Test for successful protection against deletion
         of a user participating in tasks.
@@ -177,7 +177,7 @@ class TestDeleteUser(TestCase):
         self.assertRedirects(response, reverse('users:list'), 302)
         flash_message_test(
             response,
-            _('Cannot delete user because it is in use')
+            'Cannot delete user because it is in use'
         )
         self.assertTrue(User.objects.filter(username='author').exists())
 
@@ -194,5 +194,5 @@ class TestDeleteUser(TestCase):
         ))
 
         self.assertRedirects(response, reverse('users:list'), 302)
-        flash_message_test(response, _('User deleted'))
+        flash_message_test(response, 'User deleted')
         self.assertFalse(User.objects.filter(username='lazy_user').exists())

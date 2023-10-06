@@ -9,7 +9,7 @@ from ..mixins import (
     HandleNoPermissionMixin,
     CheckUserForOwnershipAccountMixin,
     AddMessagesToFormSubmissionMixin,
-    ProtectUserFromDeletionIfUserUsingMixin,
+    RedirectForModelObjectDeleteErrorMixin,
 )
 
 
@@ -31,9 +31,9 @@ class CreateUserView(
     extra_context = {
         'title': _('Registration'),
     }
-    success_message = 'User is registered'
-    error_message = 'User registration error'
-    message_no_permission = 'You are already logged in!'
+    success_message = _('User is registered')
+    error_message = _('User registration error')
+    message_no_permission = _('You are already logged in!')
     url_no_permission = reverse_lazy('users:list')
 
 
@@ -50,24 +50,24 @@ class UpdateUserView(
     extra_context = {
         'title': _('Edit user'),
     }
-    success_message = 'User data updated'
-    error_message = 'User update error'
-    message_no_permission = 'Only the owner can update users data'
+    success_message = _('User data updated')
+    error_message = _('User update error')
+    message_no_permission = _('Only the owner can update users data')
     url_no_permission = reverse_lazy('users:list')
 
 
 class DeleteUserView(
     HandleNoPermissionMixin,
     CheckUserForOwnershipAccountMixin,
-    ProtectUserFromDeletionIfUserUsingMixin,
+    RedirectForModelObjectDeleteErrorMixin,
     AddMessagesToFormSubmissionMixin,
     DeleteView,
 ):
     model = UserModel
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users:list')
-    success_message = 'User deleted'
-    error_message = 'User deletion error'
-    message_no_permission = 'Only the owner can delete account'
-    protected_message = 'Cannot delete user because it is in use'
-    protected_redirect_url = 'users:list'
+    success_message = _('User deleted')
+    error_message = _('User deletion error')
+    message_no_permission = _('Only the owner can delete account')
+    protected_message = _('Cannot delete user because it is in use')
+    protected_redirect_url = reverse_lazy('users:list')

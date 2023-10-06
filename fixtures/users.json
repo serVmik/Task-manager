@@ -38,5 +38,15 @@
       "username": "new_executor",
       "password": "q1s2d3r4"
     }
+  },
+    {
+    "model": "users.UserModel",
+    "pk": 5,
+      "fields": {
+      "first_name": "non-participating user",
+      "last_name": "in other models",
+      "username": "lazy_user",
+      "password": "q1s2d3r4"
+    }
   }
 ]

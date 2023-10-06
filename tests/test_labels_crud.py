@@ -143,7 +143,7 @@ class TestDeleteLabel(TestCase):
             response,
             'Cannot delete label because it is in use'
         )
-        self.assertTrue(Label.objects.filter(name='not_used').exists())
+        self.assertTrue(Label.objects.filter(name='used').exists())
 
     def test_delete_label_by_guest(self):
         response = self.client.get(self.url)

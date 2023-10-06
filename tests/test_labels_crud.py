@@ -133,9 +133,9 @@ class TestDeleteLabel(TestCase):
         self.assertFalse(Label.objects.filter(name='not_used').exists())
 
     def test_delete_label_protected_error(self):
-        used_label = Label.objects.get(name='used')
+        label_used = Label.objects.get(name='used')
         self.client.force_login(self.author)
-        url = reverse_lazy('labels:delete', kwargs={'pk': used_label.pk})
+        url = reverse_lazy('labels:delete', kwargs={'pk': label_used.pk})
 
         response = self.client.post(url)
         self.assertRedirects(response, reverse_lazy('labels:list'), 302)

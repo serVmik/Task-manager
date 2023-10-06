@@ -6,7 +6,6 @@ from django.utils.translation import gettext_lazy as _
 from tests.mixins import flash_message_test
 from task_manager.users.forms import UserCreateForm, UserUpdateForm
 
-
 User = get_user_model()
 
 
@@ -144,9 +143,9 @@ class TestDeleteUser(TestCase):
     fixtures = ['users.json', 'statuses.json', 'labels.json', 'tasks.json']
 
     def setUp(self):
-        self.user = User.objects.get(username='author')
+        self.author = User.objects.get(username='author')
         self.not_author = User.objects.get(username='not_author')
-        self.url = reverse('users:delete', kwargs={'pk': self.user.pk})
+        self.url = reverse('users:delete', kwargs={'pk': self.author.pk})
 
     def test_delete_user_by_anonymous(self):
         response = self.client.get(self.url)
@@ -154,28 +153,42 @@ class TestDeleteUser(TestCase):
         flash_message_test(response, _('You are not authorized'))
         self.assertTrue(User.objects.filter(username='author').exists())
 
-    # def test_delete_user_by_not_owner(self):
-    #     self.client.force_login(self.not_author)
-    #     response = self.client.get(self.url)
-    #     self.assertRedirects(response, reverse('users:list'), 302)
-    #     flash_message_test(response, _('Only the owner can delete account'))
+    def test_delete_user_by_not_owner(self):
+        self.client.force_login(self.not_author)
+        response = self.client.get(self.url)
+        self.assertRedirects(response, reverse('users:list'), 302)
+        flash_message_test(response, _('Only the owner can delete account'))
+        self.assertTrue(User.objects.filter(username='author').exists())
 
-#
-#         self.client.force_login(user)
-#
-#         # page test, method=get
-#         response = self.client.get(url)
-#         self.assertEquals(response.status_code, 200)
-#         self.assertEquals(url, f'/users/{user.pk}/delete/')
-#         self.assertTemplateUsed(response, 'users/delete.html')
-#         self.assertIs(response.resolver_match.func.view_class, DeleteUserView)
-#
-#         # page test, method=post
-#         response = self.client.post(url)
-#         self.assertEquals(url, f'/users/{user.pk}/delete/')
-#         self.assertRedirects(response, reverse('users:list'), 302)
-#         self.assertIs(response.resolver_match.func.view_class, DeleteUserView)
-#         flash_message_test(response, _('User deleted.'))
-#
-#         # user deletion test
-#         self.assertFalse(User.objects.filter(username='ivan_ivanov').exists())
+    def test_delete_user_by_owner_protected(self):
+        # method=get
+        self.client.force_login(self.author)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(self.url, f'/users/{self.author.pk}/delete/')
+        self.assertTemplateUsed(response, 'users/delete.html')
+
+        # method=post
+        response = self.client.post(self.url)
+        self.assertTrue(User.objects.filter(username='author').exists())
+        self.assertRedirects(response, reverse('users:list'), 302)
+        flash_message_test(
+            response,
+            _('Cannot delete user because it is in use')
+        )
+
+    def test_delete_user_success(self):
+        """
+        Test for successfully deleting a user
+        who is not participating in tasks.
+        """
+        non_participating_user = User.objects.get(username='lazy_user')
+        self.client.force_login(non_participating_user)
+        response = self.client.post(reverse(
+            'users:delete',
+            kwargs={'pk': non_participating_user.pk}
+        ))
+
+        self.assertRedirects(response, reverse('users:list'), 302)
+        flash_message_test(response, _('User deleted'))
+        self.assertFalse(User.objects.filter(username='lazy_user').exists())

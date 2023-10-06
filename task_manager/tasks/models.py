@@ -23,6 +23,7 @@ class Task(models.Model):
 
     labels = models.ManyToManyField(
         Label, related_name='labels',
+        through='TaskLabelRelation',
         blank=True,
     )
 
@@ -44,3 +45,8 @@ class Task(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('tasks', kwargs={'pk': self.pk})
+
+
+class TaskLabelRelation(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    label = models.ForeignKey(Label, on_delete=models.PROTECT)

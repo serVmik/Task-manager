@@ -9,6 +9,7 @@ from ..mixins import (
     HandleNoPermissionMixin,
     CheckUserForOwnershipAccountMixin,
     AddMessagesToFormSubmissionMixin,
+    ProtectUserFromDeletionIfUserUsingMixin,
 )
 
 
@@ -58,11 +59,15 @@ class UpdateUserView(
 class DeleteUserView(
     HandleNoPermissionMixin,
     CheckUserForOwnershipAccountMixin,
+    ProtectUserFromDeletionIfUserUsingMixin,
     AddMessagesToFormSubmissionMixin,
     DeleteView,
 ):
     model = UserModel
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users:list')
-    success_message = 'User deleted.'
-    error_message = 'User deletion error.'
+    success_message = 'User deleted'
+    error_message = 'User deletion error'
+    message_no_permission = 'Only the owner can delete account'
+    protected_message = 'Cannot delete user because it is in use'
+    protected_redirect_url = 'users:list'

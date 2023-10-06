@@ -76,3 +76,4 @@ class DeleteTaskView(
     template_name = 'tasks/delete.html'
     success_url = reverse_lazy('tasks:list')
     success_message = 'The task was successfully deleted'
+    message_no_permission = 'Only the author can delete task'

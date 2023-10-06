@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse_lazy
 
+from task_manager.labels.forms import LabelForm
 from task_manager.labels.models import Label
 from tests.mixins import flash_message_test
 
@@ -40,7 +41,7 @@ class TestCreateLabel(TestCase):
 
     def setUp(self):
         self.author = User.objects.get(username='author')
-        self.data_for_label_creation = {
+        self.data_for_label = {
             "name": "created_label",
         }
         self.url = reverse_lazy('labels:create')
@@ -50,9 +51,60 @@ class TestCreateLabel(TestCase):
 
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
+        self.assertIsInstance(response.context['form'], LabelForm)
         self.assertFalse(Label.objects.filter(name='created_label').exists())
 
-        response = self.client.post(self.url, self.data_for_label_creation)
+        response = self.client.post(self.url, self.data_for_label)
         self.assertRedirects(response, reverse_lazy('labels:list'), 302)
         flash_message_test(response, 'Label created successfully')
         self.assertTrue(Label.objects.filter(name='created_label').exists())
+
+    def test_create_label_by_guest(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(response, reverse_lazy('login'), 302)
+        flash_message_test(response, 'You are not authorized')
+
+        self.client.post(self.url, self.data_for_label)
+        self.assertFalse(Label.objects.filter(name='created_label').exists())
+
+    def test_create_label_error(self):
+        self.client.force_login(self.author)
+        response = self.client.post(self.url, {})
+        self.assertEquals(response.status_code, 200)
+        flash_message_test(response, 'Error creating label')
+
+
+class TestUpdateLabel(TestCase):
+    fixtures = ['users.json', 'statuses.json', 'labels.json', 'tasks.json']
+
+    def setUp(self):
+        self.label = Label.objects.get(name='important')
+        self.data_for_update = {'name': 'updated_name'}
+        self.author = User.objects.get(username='author')
+        self.not_author = User.objects.get(username='not_author')
+        self.url = reverse_lazy('labels:update', kwargs={'pk': self.label.pk})
+
+    def test_update_label_success(self):
+        self.client.force_login(self.author)
+
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+        self.assertIsInstance(response.context['form'], LabelForm)
+
+        response = self.client.post(self.url, self.data_for_update)
+        self.assertRedirects(response, reverse_lazy('labels:list'), 302)
+        flash_message_test(response, 'Label updated successfully')
+        self.assertTrue(Label.objects.filter(name='updated_name').exists())
+
+    def test_update_label_error(self):
+        self.client.force_login(self.author)
+
+        response = self.client.post(self.url, {})
+        self.assertEquals(response.status_code, 200)
+        flash_message_test(response, 'Label update error')
+        self.assertFalse(Label.objects.filter(name='updated_name').exists())
+
+    def test_update_label_by_guest(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(response, reverse_lazy('login'), 302)
+        flash_message_test(response, 'You are not authorized')

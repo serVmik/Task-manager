@@ -108,3 +108,45 @@ class TestUpdateLabel(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, reverse_lazy('login'), 302)
         flash_message_test(response, 'You are not authorized')
+
+
+class TestDeleteLabel(TestCase):
+    fixtures = ['users.json', 'statuses.json', 'labels.json', 'tasks.json']
+
+    def setUp(self):
+        self.author = User.objects.get(username='author')
+        self.not_used_label = Label.objects.get(name='not_used')
+        self.url = reverse_lazy(
+            'labels:delete',
+            kwargs={'pk': self.not_used_label.pk}
+        )
+
+    def test_delete_label_success(self):
+        self.client.force_login(self.author)
+
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+        response = self.client.post(self.url)
+        self.assertRedirects(response, reverse_lazy('labels:list'), 302)
+        flash_message_test(response, 'Label deleted successfully')
+        self.assertFalse(Label.objects.filter(name='not_used').exists())
+
+    def test_delete_label_protected_error(self):
+        used_label = Label.objects.get(name='used')
+        self.client.force_login(self.author)
+        url = reverse_lazy('labels:delete', kwargs={'pk': used_label.pk})
+
+        response = self.client.post(url)
+        self.assertRedirects(response, reverse_lazy('labels:list'), 302)
+        flash_message_test(
+            response,
+            'Cannot delete label because it is in use'
+        )
+        self.assertTrue(Label.objects.filter(name='not_used').exists())
+
+    def test_delete_label_by_guest(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(response, reverse_lazy('login'), 302)
+        flash_message_test(response, 'You are not authorized')
+        self.assertTrue(Label.objects.filter(name='not_used').exists())

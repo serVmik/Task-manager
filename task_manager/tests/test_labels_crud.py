@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 
 from task_manager.labels.forms import LabelForm
 from task_manager.labels.models import Label
-from tests.mixins import flash_message_test
+from task_manager.tests.mixins import flash_message_test
 
 User = get_user_model()
 
@@ -46,7 +46,7 @@ class TestCreateLabel(TestCase):
         }
         self.url = reverse_lazy('labels:create')
 
-    def test_create_data_successfully(self):
+    def test_create_label_successfully(self):
         self.client.force_login(self.author)
 
         response = self.client.get(self.url)

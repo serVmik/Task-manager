@@ -3,6 +3,7 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 
 import os
+# import dj_database_url
 from dotenv import load_dotenv
 
 from .logging_formatters import CustomJsonFormatter
@@ -24,6 +25,7 @@ DEBUG = os.getenv('DEBUG')
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'webserver',
+    '.onrender.com',
 ]
 
 
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
 # https://docs.djangoproject.com/en/4.1/topics/i18n/translation/#how-django-discovers-language-preference
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -127,6 +130,9 @@ DATABASES = {
     }
 }
 
+# DATABASES['default'].update(
+#     dj_database_url.config(conn_max_age=600)
+# )
 
 # User
 # https://docs.djangoproject.com/en/4.1/topics/auth/customizing/#substituting-a-custom-user-model
@@ -137,6 +143,9 @@ LOGIN_REDIRECT_URL = 'home'
 
 # https://docs.djangoproject.com/en/4.2/ref/settings/#login-url
 LOGIN_URL = 'login'
+
+# LOGOUT_URL = 'home'
+# LOGOUT_REDIRECT_URL = 'home'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -180,8 +189,11 @@ LOCALE_PATHS = [
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
+# https://whitenoise.readthedocs.io/en/latest/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

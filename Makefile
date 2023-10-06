@@ -1,4 +1,4 @@
-MANAGE := python manage.py
+MANAGE := poetry run ./manage.py
 
 dev:
 	@$(MANAGE) runserver
@@ -13,10 +13,10 @@ lint:
 	poetry run flake8
 
 test:
-	@$(MANAGE) test tests
+	@$(MANAGE) test task_manager/tests
 
 test-dev:
-	@$(MANAGE) test tests.test_labels_crud
+	@$(MANAGE) test task_manager/tests.test_labels_crud
 
 test-coverage:
 	poetry run coverage run --source="task_manager" manage.py test task_manager

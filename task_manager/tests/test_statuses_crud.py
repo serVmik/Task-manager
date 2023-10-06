@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from task_manager.users.models import UserModel
 
-from tests.mixins import AppTestMixin
+from task_manager.tests.mixins import AppTestMixin
 from task_manager.statuses.models import Status
 from task_manager.statuses.views import (
     CreateStatusView,

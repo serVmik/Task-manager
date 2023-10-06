@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
-from tests.mixins import flash_message_test
+from task_manager.tests.mixins import flash_message_test
 from task_manager.users.forms import UserCreateForm, UserUpdateForm
 
 User = get_user_model()

@@ -7,7 +7,7 @@ from task_manager.statuses.models import Status
 from task_manager.tasks.models import Task
 from task_manager.tasks.views import (ListTasksView, CreateTaskView,
                                       UpdateTaskView, DeleteTaskView)
-from tests.mixins import flash_message_test, AppTestMixin
+from task_manager.tests.mixins import flash_message_test, AppTestMixin
 
 User = get_user_model()
 

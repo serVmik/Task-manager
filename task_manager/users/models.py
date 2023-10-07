@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractUser
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 
 
 class UserModel(AbstractUser):
@@ -8,7 +8,7 @@ class UserModel(AbstractUser):
         return self.get_full_name()
 
     def get_absolute_url(self):
-        return reverse('users:show', kwargs={'pk': self.pk})
+        return reverse_lazy('users:show', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = 'Пользователь'

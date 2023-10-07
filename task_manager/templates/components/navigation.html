@@ -1,28 +1,36 @@
 {% load i18n %}
 
 <!--======== Navigation =======-->
-<nav class="pb-4 pt-1">
-  <ul class="nav nav-tabs">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
 
-    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">{% trans 'Task manager' %}</a></li>
-    <li class="nav-item"><a class="nav-link" href="{% url 'users:list' %}">{% trans 'Users' %}</a></li>
+    <a class="navbar-brand" href="{% url 'home' %}">{% trans 'Task manager' %}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-    {% if user.is_authenticated %}
-      <li class="nav-item"><a class="nav-link" href="{% url 'statuses:list' %}">{% trans 'Statuses' %}</a></li>
-      <li class="nav-item"><a class="nav-link" href="{% url 'tasks:list' %}">{% trans 'Tasks' %}</a></li>
-      <li class="nav-item"><a class="nav-link" href="{% url 'labels:list' %}">{% trans 'Labels' %}</a></li>
-    {% endif %}
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="nav nav-tabs">
 
-    {% if user.is_authenticated %}
-      <li class="nav-item"><a class="nav-link disabled" href="#">{{ user.username }}</a></li>
-      <li><p class="nav-link disabled">|</p></li>
-      <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
-    {% else %}
-      <li class="nav-item"><a class="nav-link" href="{% url 'users:create' %}">{% trans 'Registration' %}</a></li>
-      <li><p class="nav-link disabled">|</p></li>
-      <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">{% trans 'Login' %}</a></li>
-    {% endif %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'users:list' %}">{% trans 'Users' %}</a></li>
 
-    {% include 'components/language_selector.html' %}
-  </ul>
+        {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'statuses:list' %}">{% trans 'Statuses' %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'tasks:list' %}">{% trans 'Tasks' %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'labels:list' %}">{% trans 'Labels' %}</a></li>
+
+          <li class="nav-item"><a class="nav-link disabled" href="#">{{ user.username }}</a></li>
+          <li><p class="nav-link disabled">|</p></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'users:create' %}">{% trans 'Registration' %}</a></li>
+          <li><p class="nav-link disabled">|</p></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">{% trans 'Login' %}</a></li>
+        {% endif %}
+
+      </ul>
+    </div>
+
+  </div>
 </nav><!-- End Navigation -->

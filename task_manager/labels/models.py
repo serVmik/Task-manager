@@ -16,3 +16,7 @@ class Label(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('labels', kwargs={'pk': self.pk})
+
+    class Meta:
+        verbose_name = 'Метка'
+        verbose_name_plural = 'Метки'

@@ -11,3 +11,7 @@ class Status(models.Model):
 
     def get_absolute_url(self):
         return reverse('statuses', kwargs={'pk': self.pk})
+
+    class Meta:
+        verbose_name = 'Статус'
+        verbose_name_plural = 'Статусы'

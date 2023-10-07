@@ -202,5 +202,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # fixtures directory
 FIXTURE_DIRS = (
-    os.path.join(BASE_DIR, "fixtures"),
+    os.path.join(BASE_DIR, 'fixtures'),
 )

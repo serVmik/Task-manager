@@ -16,28 +16,35 @@ class Task(models.Model):
             'unique': _('Such a task already exists!'),
         },
         help_text=_('<i>Input task name</i>'),
-        # db_column='task_name',
+        verbose_name='Имя'
     )
     description = models.TextField(blank=True)
-    status = models.ForeignKey(Status, on_delete=models.PROTECT)
-
+    status = models.ForeignKey(
+        Status,
+        on_delete=models.PROTECT,
+        verbose_name='Статус',
+    )
     labels = models.ManyToManyField(
         Label, related_name='labels',
         through='TaskLabelRelation',
         blank=True,
     )
-
     author = models.ForeignKey(
         UserModel, related_name='author',
         on_delete=models.PROTECT,
         blank=False,
+        verbose_name='Автор',
     )
     executor = models.ForeignKey(
         UserModel, related_name='executor',
         on_delete=models.PROTECT,
         blank=True, null=True,
+        verbose_name='Исполнитель',
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата создания',
+    )
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -45,6 +52,11 @@ class Task(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('tasks', kwargs={'pk': self.pk})
+
+    class Meta:
+        verbose_name = 'Задача'
+        verbose_name_plural = 'Задачи'
+        ordering = ['created_at', 'name']
 
 
 class TaskLabelRelation(models.Model):

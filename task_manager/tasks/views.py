@@ -1,6 +1,7 @@
+from typing import Type
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (
-    ListView,
     DetailView,
     CreateView,
     UpdateView,
@@ -8,12 +9,14 @@ from django.views.generic import (
 )
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
+from django_filters.views import FilterView
 
 from task_manager.mixins import (
     AddMessagesToFormSubmissionMixin,
     CheckAuthorshipTaskMixin,
     HandleNoPermissionMixin,
 )
+from task_manager.tasks.filters import TaskFilter
 from task_manager.tasks.models import Task
 from task_manager.tasks.forms import TaskForm
 
@@ -21,11 +24,13 @@ from task_manager.tasks.forms import TaskForm
 class ListTasksView(
     HandleNoPermissionMixin,
     LoginRequiredMixin,
-    ListView,
+    FilterView,
 ):
     model = Task
     template_name = 'tasks/list.html'
     context_object_name = 'tasks'
+    filterset_class: Type[TaskFilter] = TaskFilter
+
     message_no_permission = _('You are not authorized')
     logger_no_permission = _('The action was taken by an unauthorized user')
 

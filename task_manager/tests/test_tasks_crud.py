@@ -46,7 +46,7 @@ class ReadeTaskTest(TestCase):
         self.assertInHTML(str(Status.objects.get(pk=task.status.pk)), html)
         self.assertInHTML(str(User.objects.get(pk=task.author.pk)), html)
         self.assertInHTML(str(User.objects.get(pk=task.executor.pk)), html)
-        self.assertInHTML(task.created_at.strftime("%d-%m-%Y %H:%M"), html)
+        self.assertInHTML(task.created_at.strftime('%d-%m-%Y %H:%M'), html)
 
         self.assertInHTML(_('Tasks'), html)
         self.assertInHTML(_('Create task'), html, count=1)
@@ -229,13 +229,13 @@ class ShowTaskTest(TestCase):
     fixtures = ['users.json', 'statuses.json', 'labels.json', 'tasks.json']
 
     def setUp(self):
-        self.author = User.object.get(username='author')
+        self.author = User.objects.get(username='author')
         self.task = Task.objects.get(pk=3)
         self.url = reverse('tasks:show', kwargs={'pk': self.task.pk})
 
     def test_read_task(self):
         self.client.force_login(self.author)
-        response = self.client.post(self.url)
+        response = self.client.get(self.url)
         html = response.content.decode()
 
         self.assertEquals(response.status_code, 200)
@@ -243,20 +243,19 @@ class ShowTaskTest(TestCase):
         self.assertTemplateUsed(response, 'tasks/show.html')
         self.assertIs(response.resolver_match.func.view_class, ShowTaskView)
 
-        self.assertInHTML('View a task', html)
-        self.assertInHTML('Edit', html)
-        self.assertInHTML('Delete', html)
+        self.assertInHTML(_('View a task'), html)
+        self.assertInHTML(_('Edit'), html)
+        self.assertInHTML(_('Delete'), html)
 
         self.assertInHTML(self.task.name, html)
         self.assertInHTML(self.task.description, html)
-        self.assertInHTML(self.task.User.objects.get(pk=self.task.author_id), html)
-        self.assertInHTML(self.task.User.objects.get(pk=self.task.executor_id), html)
-        self.assertInHTML(self.task.Status.objects.get(pk=self.task.status_id), html)
-        self.assertInHTML(self.task.created_at, html)
-        self.assertInHTML(self.task.labels.all, html)
+        self.assertInHTML(str(self.task.author), html)
+        self.assertInHTML(str(self.task.executor), html)
+        self.assertInHTML(self.task.created_at.strftime('%d.%m.%Y %H:%M'), html)
+        for label in self.task.labels.all():
+            self.assertInHTML(label.name, html)
 
     def test_read_task_by_guest(self):
         response = self.client.get(self.url)
-
         self.assertRedirects(response, reverse('login'), 302)
         flash_message_test(response, 'You are not authorized')

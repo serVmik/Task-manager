@@ -1,5 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -20,6 +26,18 @@ class ListTasksView(
     model = Task
     template_name = 'tasks/list.html'
     context_object_name = 'tasks'
+    message_no_permission = _('You are not authorized')
+    logger_no_permission = _('The action was taken by an unauthorized user')
+
+
+class ShowTaskView(
+    HandleNoPermissionMixin,
+    LoginRequiredMixin,
+    DetailView,
+):
+    model = Task
+    template_name = 'tasks/show.html'
+    context_object_name = 'task'
     message_no_permission = _('You are not authorized')
     logger_no_permission = _('The action was taken by an unauthorized user')
 

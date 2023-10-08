@@ -25,7 +25,6 @@
       <div class="col">{% trans 'Author' %}</div>
       <div class="col">{{ task.author }}</div>
     </div>
-
     <div class="row p-1">
       <div class="col">{% trans 'Executor' %}</div>
       <div class="col">
@@ -36,12 +35,10 @@
         {% endif %}
       </div>
     </div>
-
     <div class="row p-1">
       <div class="col">{% trans 'Status' %}</div>
       <div class="col">{{ task.status }}</div>
     </div>
-
     <div class="row p-1">
       <div class="col">{% trans 'Created date' %}</div>
       <div class="col">{{ task.created_at|date:'d.m.Y H:i' }}</div>
@@ -55,6 +52,13 @@
         </ul>
       </div>
     </div>
+
+    <div>
+      <a href="{% url 'tasks:update' task.pk %}">{% trans 'Edit' %}</a>
+      <br>
+      <a href="{% url 'tasks:delete' task.pk %}">{% trans 'Delete' %}</a>
+    </div>
+
   </div>
 </div>
 </div>

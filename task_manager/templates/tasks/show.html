@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+
+<h1>
+  {% block title %}
+  {% trans 'View a task' %}
+  {% endblock %}
+</h1>
+
+<div class="card">
+  <div class="card-header bg-secondary text-white">
+    <h2>{{ task.name }}</h2>
+  </div>
+
+  <div class="card-body bg-light">
+    <div>
+      {{ task.description }}
+    </div>
+    <hr>
+
+    <div class="row p-1">
+      <div class="col">{% trans 'Author' %}</div>
+      <div class="col">{{ task.author }}</div>
+    </div>
+
+    <div class="row p-1">
+      <div class="col">{% trans 'Executor' %}</div>
+      <div class="col">
+        {% if task.executor %}
+          {{ task.executor }}
+        {% else %}
+          {% trans 'Executor not appointed' %}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="row p-1">
+      <div class="col">{% trans 'Status' %}</div>
+      <div class="col">{{ task.status }}</div>
+    </div>
+
+    <div class="row p-1">
+      <div class="col">{% trans 'Created date' %}</div>
+      <div class="col">{{ task.created_at|date:'d.m.Y H:i' }}</div>
+    </div>
+    <div class="row p-1">
+      <div class="col"><h6>{% trans 'Labels' %}</h6><div>
+        <ul>
+          {% for label in task.labels.all %}
+            <li>{{ label.name }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

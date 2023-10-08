@@ -3,19 +3,18 @@
 {% load i18n django_bootstrap5 %}
 
 {% block content%}
-<div class="card p-4">
-<h1>
-  {% block title %}
-  {% trans 'Delete label' %}
-  {% endblock title %}
-</h1>
-
-<p>{% trans 'Delete?' %}</p>
-<form method="post">
-  {% csrf_token %}
-  {% bootstrap_form form %}
-  <button type="submit" class="btn btn-danger">{% trans 'Yes, delete!' %}</button>
-</form>
+<div class="card bg-light p-4">
+  <h1>
+    {% block title %}
+    {% trans 'Delete label' %}
+    {% endblock title %}
+  </h1>
+  <p>{% trans 'Delete?' %}</p>
+  <form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button type="submit" class="btn btn-danger">{% trans 'Yes, delete!' %}</button>
+  </form>
 </div>
 
 

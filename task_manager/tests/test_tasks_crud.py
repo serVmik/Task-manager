@@ -6,13 +6,14 @@ from django.utils.translation import gettext_lazy as _
 from task_manager.statuses.models import Status
 from task_manager.tasks.models import Task
 from task_manager.tasks.views import (ListTasksView, CreateTaskView,
-                                      UpdateTaskView, DeleteTaskView)
+                                      UpdateTaskView, DeleteTaskView,
+                                      ShowTaskView)
 from task_manager.tests.mixins import flash_message_test, AppTestMixin
 
 User = get_user_model()
 
 
-class ReadTaskTest(TestCase):
+class ReadeTaskTest(TestCase):
     fixtures = ['users.json', 'statuses.json', 'labels.json', 'tasks.json']
 
     def setUp(self):
@@ -61,7 +62,7 @@ class ReadTaskTest(TestCase):
         # test page content filter !!!!!!!!!!!!!!!!!!
 
 
-class CreateTaskTest(TestCase):
+class TestCreateTaskTest(TestCase):
     fixtures = ['users.json', 'statuses.json', 'labels.json', 'tasks.json']
 
     def setUp(self):
@@ -222,3 +223,40 @@ class DeleteTaskTest(AppTestMixin, TestCase):
         self.flash_message_test(response,
                                 _('The task was successfully deleted'))
         self.assertFalse(Task.objects.filter(name='current').exists())
+
+
+class ShowTaskTest(TestCase):
+    fixtures = ['users.json', 'statuses.json', 'labels.json', 'tasks.json']
+
+    def setUp(self):
+        self.author = User.object.get(username='author')
+        self.task = Task.objects.get(pk=3)
+        self.url = reverse('tasks:show', kwargs={'pk': self.task.pk})
+
+    def test_read_task(self):
+        self.client.force_login(self.author)
+        response = self.client.post(self.url)
+        html = response.content.decode()
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(self.url, '/tasks/3/')
+        self.assertTemplateUsed(response, 'tasks/show.html')
+        self.assertIs(response.resolver_match.func.view_class, ShowTaskView)
+
+        self.assertInHTML('View a task', html)
+        self.assertInHTML('Edit', html)
+        self.assertInHTML('Delete', html)
+
+        self.assertInHTML(self.task.name, html)
+        self.assertInHTML(self.task.description, html)
+        self.assertInHTML(self.task.User.objects.get(pk=self.task.author_id), html)
+        self.assertInHTML(self.task.User.objects.get(pk=self.task.executor_id), html)
+        self.assertInHTML(self.task.Status.objects.get(pk=self.task.status_id), html)
+        self.assertInHTML(self.task.created_at, html)
+        self.assertInHTML(self.task.labels.all, html)
+
+    def test_read_task_by_guest(self):
+        response = self.client.get(self.url)
+
+        self.assertRedirects(response, reverse('login'), 302)
+        flash_message_test(response, 'You are not authorized')

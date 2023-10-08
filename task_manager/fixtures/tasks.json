@@ -24,5 +24,20 @@
       "created_at": "2023-10-04T00:01:02.264Z",
       "updated_at": "2023-10-04T00:02:02.264Z"
     }
+  },
+  {
+    "model": "tasks.Task",
+    "pk": 3,
+    "fields": {
+      "name": "show_task",
+      "author_id": 1,
+      "executor_id": 3,
+      "status_id": 2,
+      "labels": [
+        1
+      ],
+      "created_at": "2023-10-04T00:01:02.264Z",
+      "updated_at": "2023-10-04T00:02:02.264Z"
+    }
   }
 ]

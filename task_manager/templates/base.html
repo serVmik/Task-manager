@@ -6,7 +6,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>{% block title %}{% endblock %}</title>
-
   {% bootstrap_css %}
   {% bootstrap_javascript %}
 </head>
@@ -14,9 +13,7 @@
 <body class="container">
 {% include 'components/navigation.html' %}
 {% bootstrap_messages %}
-
 {% block content %}{% endblock %}
-
 {% include 'components/footer.html' %}
 </body>
 </html>

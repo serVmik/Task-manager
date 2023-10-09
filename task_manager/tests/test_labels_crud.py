@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 from task_manager.labels.forms import LabelForm
 from task_manager.labels.models import Label
@@ -31,7 +32,7 @@ class TestReadLabelsList(TestCase):
     def test_read_labels_list_by_guest(self):
         response = self.client.get(reverse_lazy('labels:list'))
         self.assertRedirects(response, reverse_lazy('login'), 302)
-        flash_message_test(response, 'You are not authorized')
+        flash_message_test(response, _('You are not authorized'))
 
     # add test paginate
 
@@ -56,13 +57,13 @@ class TestCreateLabel(TestCase):
 
         response = self.client.post(self.url, self.data_for_label)
         self.assertRedirects(response, reverse_lazy('labels:list'), 302)
-        flash_message_test(response, 'Label created successfully')
+        flash_message_test(response, _('Label created successfully'))
         self.assertTrue(Label.objects.filter(name='created_label').exists())
 
     def test_create_label_by_guest(self):
         response = self.client.get(self.url)
         self.assertRedirects(response, reverse_lazy('login'), 302)
-        flash_message_test(response, 'You are not authorized')
+        flash_message_test(response, _('You are not authorized'))
 
         self.client.post(self.url, self.data_for_label)
         self.assertFalse(Label.objects.filter(name='created_label').exists())
@@ -71,7 +72,7 @@ class TestCreateLabel(TestCase):
         self.client.force_login(self.author)
         response = self.client.post(self.url, {})
         self.assertEquals(response.status_code, 200)
-        flash_message_test(response, 'Error creating label')
+        flash_message_test(response, _('Error creating label'))
 
 
 class TestUpdateLabel(TestCase):
@@ -93,7 +94,7 @@ class TestUpdateLabel(TestCase):
 
         response = self.client.post(self.url, self.data_for_update)
         self.assertRedirects(response, reverse_lazy('labels:list'), 302)
-        flash_message_test(response, 'Label updated successfully')
+        flash_message_test(response, _('Label updated successfully'))
         self.assertTrue(Label.objects.filter(name='updated_name').exists())
 
     def test_update_label_error(self):
@@ -101,13 +102,13 @@ class TestUpdateLabel(TestCase):
 
         response = self.client.post(self.url, {})
         self.assertEquals(response.status_code, 200)
-        flash_message_test(response, 'Label update error')
+        flash_message_test(response, _('Label update error'))
         self.assertFalse(Label.objects.filter(name='updated_name').exists())
 
     def test_update_label_by_guest(self):
         response = self.client.get(self.url)
         self.assertRedirects(response, reverse_lazy('login'), 302)
-        flash_message_test(response, 'You are not authorized')
+        flash_message_test(response, _('You are not authorized'))
 
 
 class TestDeleteLabel(TestCase):
@@ -129,7 +130,7 @@ class TestDeleteLabel(TestCase):
 
         response = self.client.post(self.url)
         self.assertRedirects(response, reverse_lazy('labels:list'), 302)
-        flash_message_test(response, 'Label deleted successfully')
+        flash_message_test(response, _('Label deleted successfully'))
         self.assertFalse(Label.objects.filter(name='not_used').exists())
 
     def test_delete_label_protected_error(self):
@@ -141,12 +142,12 @@ class TestDeleteLabel(TestCase):
         self.assertRedirects(response, reverse_lazy('labels:list'), 302)
         flash_message_test(
             response,
-            'Cannot delete label because it is in use'
+            _('Cannot delete label because it is in use')
         )
         self.assertTrue(Label.objects.filter(name='used').exists())
 
     def test_delete_label_by_guest(self):
         response = self.client.get(self.url)
         self.assertRedirects(response, reverse_lazy('login'), 302)
-        flash_message_test(response, 'You are not authorized')
+        flash_message_test(response, _('You are not authorized'))
         self.assertTrue(Label.objects.filter(name='not_used').exists())

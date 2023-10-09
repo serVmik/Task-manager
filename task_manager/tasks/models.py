@@ -15,38 +15,40 @@ class Task(models.Model):
         error_messages={
             'unique': _('Such a task already exists!'),
         },
-        help_text=f"<i>{_('Required field')}</i>",
-        verbose_name='Имя'
+        help_text='<i>' + _('Required field') + '</i>',
+        verbose_name=_('Name')
     )
     description = models.TextField(
         blank=True,
+        verbose_name=_('Description')
     )
     status = models.ForeignKey(
         Status,
         on_delete=models.PROTECT,
-        help_text=f"<i>{_('Required field')}</i>",
-        verbose_name='Статус',
+        help_text='<i>' + _('Required field') + '</i>',
+        verbose_name=_('Status'),
     )
     labels = models.ManyToManyField(
         Label, related_name='labels',
         through='TaskLabelRelation',
         blank=True,
+        verbose_name=_('Labels')
     )
     author = models.ForeignKey(
         UserModel, related_name='author',
         on_delete=models.PROTECT,
         blank=False,
-        verbose_name='Автор',
+        verbose_name=_('Author'),
     )
     executor = models.ForeignKey(
         UserModel, related_name='executor',
         on_delete=models.PROTECT,
         blank=True, null=True,
-        verbose_name='Исполнитель',
+        verbose_name=_('Executor'),
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name='Дата создания',
+        verbose_name=_('Date of creation'),
     )
     updated_at = models.DateTimeField(auto_now=True)
 

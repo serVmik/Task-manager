@@ -50,10 +50,10 @@ class ReadeTaskTest(TestCase):
 
         self.assertInHTML(_('Tasks'), html)
         self.assertInHTML(_('Create task'), html, count=1)
-        self.assertInHTML(_('ID'), html, count=1)
+        self.assertInHTML('ID', html, count=1)
         self.assertInHTML(_('Name'), html, count=1)
-        self.assertInHTML(_('Status'), html, count=1)
-        self.assertInHTML(_('Executor'), html, count=1)
+        self.assertInHTML(_('Status'), html, count=2)
+        self.assertInHTML(_('Executor'), html, count=2)
         self.assertInHTML(_('Date of create'), html, count=1)
         self.assertInHTML(_('Edit'), html)
         self.assertInHTML(_('Delete'), html)
@@ -104,13 +104,13 @@ class TestCreateTaskTest(TestCase):
         self.assertTrue(Task.objects.filter(name='created task').exists())
         self.assertEquals(self.url, '/tasks/create/')
         self.assertRedirects(response, reverse('tasks:list'), 302)
-        flash_message_test(response, 'Task added successfully')
+        flash_message_test(response, _('Task added successfully'))
 
     def test_create_task_with_error(self):
         self.client.force_login(self.author)
         response = self.client.post(self.url, self.task_data_error)
         self.assertEquals(response.status_code, 200)
-        flash_message_test(response, 'Error adding task')
+        flash_message_test(response, _('Error adding task'))
 
 
 class UpdateTaskTest(TestCase):
@@ -181,7 +181,7 @@ class UpdateTaskTest(TestCase):
         self.client.force_login(self.not_author)
         response = self.client.post(self.url, self.task_data_error)
         self.assertEquals(response.status_code, 200)
-        flash_message_test(response, 'Task update error')
+        flash_message_test(response, _('Task update error'))
 
 
 class DeleteTaskTest(AppTestMixin, TestCase):
@@ -258,4 +258,4 @@ class ShowTaskTest(TestCase):
     def test_read_task_by_guest(self):
         response = self.client.get(self.url)
         self.assertRedirects(response, reverse('login'), 302)
-        flash_message_test(response, 'You are not authorized')
+        flash_message_test(response, _('You are not authorized'))

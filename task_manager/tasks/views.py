@@ -57,12 +57,12 @@ class CreateTaskView(
     template_name = 'tasks/form.html'
     success_url = reverse_lazy('tasks:list')
     extra_context = {
-        'title': _('Create Task'),
+        'title': _('Create task'),
     }
-    success_message = 'Task added successfully'
-    error_message = 'Error adding task'
-    message_no_permission = 'You are not authorized'
-    logger_no_permission = 'The action was taken by an unauthorized user'
+    success_message = _('Task added successfully')
+    error_message = _('Error adding task')
+    message_no_permission = _('You are not authorized')
+    logger_no_permission = _('The action was taken by an unauthorized user')
 
     def form_valid(self, form):
         """Add current user on author field Task model."""
@@ -83,10 +83,10 @@ class UpdateTaskView(
     extra_context = {
         'title': _('Update task')
     }
-    success_message = 'Task successfully updated'
-    error_message = 'Task update error'
-    message_no_permission = 'You are not authorized'
-    logger_no_permission = 'The action was taken by an unauthorized user'
+    success_message = _('Task successfully updated')
+    error_message = _('Task update error')
+    message_no_permission = _('You are not authorized')
+    logger_no_permission = _('The action was taken by an unauthorized user')
 
 
 class DeleteTaskView(
@@ -98,5 +98,5 @@ class DeleteTaskView(
     model = Task
     template_name = 'tasks/delete.html'
     success_url = reverse_lazy('tasks:list')
-    success_message = 'The task was successfully deleted'
-    message_no_permission = 'Only the author can delete task'
+    success_message = _('The task was successfully deleted')
+    message_no_permission = _('Only the author can delete task')

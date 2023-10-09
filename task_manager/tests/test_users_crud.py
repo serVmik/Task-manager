@@ -136,7 +136,7 @@ class TestUpdateUser(TestCase):
         response = self.client.get(url, self.new_user_data)
 
         self.assertRedirects(response, reverse('users:list'), 302)
-        flash_message_test(response, 'Only the owner can update users data')
+        flash_message_test(response, _('Only the owner can update users data'))
 
 
 class TestDeleteUser(TestCase):
@@ -177,7 +177,7 @@ class TestDeleteUser(TestCase):
         self.assertRedirects(response, reverse('users:list'), 302)
         flash_message_test(
             response,
-            'Cannot delete user because it is in use'
+            _('Cannot delete user because it is in use')
         )
         self.assertTrue(User.objects.filter(username='author').exists())
 
@@ -194,5 +194,5 @@ class TestDeleteUser(TestCase):
         ))
 
         self.assertRedirects(response, reverse('users:list'), 302)
-        flash_message_test(response, 'User deleted')
+        flash_message_test(response, _('User deleted'))
         self.assertFalse(User.objects.filter(username='lazy_user').exists())

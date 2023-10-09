@@ -15,13 +15,16 @@ class Task(models.Model):
         error_messages={
             'unique': _('Such a task already exists!'),
         },
-        help_text=_('<i>Input task name</i>'),
+        help_text=f"<i>{_('Required field')}</i>",
         verbose_name='Имя'
     )
-    description = models.TextField(blank=True)
+    description = models.TextField(
+        blank=True,
+    )
     status = models.ForeignKey(
         Status,
         on_delete=models.PROTECT,
+        help_text=f"<i>{_('Required field')}</i>",
         verbose_name='Статус',
     )
     labels = models.ManyToManyField(

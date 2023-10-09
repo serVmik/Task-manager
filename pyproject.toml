@@ -1,9 +1,19 @@
 [tool.poetry]
 name = "hexlet-code"
 version = "0.1.0"
-description = ""
+description = "Task management is the process of managing a task through its lifecycle. It involves planning, testing, tracking, and reporting."
 authors = ["Sergei Mikurov <454004@mail.ru>"]
 readme = "README.md"
+repository = "https://github.com/serVmik/python-project-52.git"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Other Audience",
+    "License :: Freeware",
+    "Natural Language :: English, Russian",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+]
+
 packages = [
     { include = "task_manager" }
 ]
@@ -19,6 +29,7 @@ whitenoise = "^6.5.0"
 psycopg2-binary = "^2.9.9"
 gunicorn = "^21.2.0"
 django-filter = "^23.3"
+rollbar = "^0.16.3"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -32,13 +32,13 @@ jobs:
         run: |
           make test
 
-#        # Run pytest via: make test-coverage.
-#        # Publishing code test on Code Climate.
-#      - name: Test & publish code coverage for Code Climate
-#        uses: paambaati/codeclimate-action@v3.0.0
-#        if: github.ref_name == 'main'
-#        env:
-#          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-#        with:
-#          coverageCommand: make test-coverage
-#          debug: true
+        # Run pytest via: make test-coverage.
+        # Publishing code test on Code Climate.
+      - name: Test & publish code coverage for Code Climate
+        uses: paambaati/codeclimate-action@v3.0.0
+        if: github.ref_name == 'main'
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: make test-coverage
+          debug: true

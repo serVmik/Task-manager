@@ -1,5 +1,9 @@
 MANAGE := poetry run ./manage.py
 
+migrate:
+	@$(MANAGE) makemigrations
+	@$(MANAGE) migrate
+
 dev:
 	@$(MANAGE) runserver
 

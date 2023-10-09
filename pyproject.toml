@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "hexlet-code"
 version = "0.1.0"
-description = "Task management is the process of managing a task through its lifecycle. It involves planning, testing, tracking, and reporting."
+description = "Task management is the process of managing a task through its lifecycle. It involves planning, testing, tracking."
 authors = ["Sergei Mikurov <454004@mail.ru>"]
 readme = "README.md"
 repository = "https://github.com/serVmik/python-project-52.git"

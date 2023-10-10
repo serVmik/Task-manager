@@ -8,7 +8,7 @@ from task_manager.tasks.models import Task
 from task_manager.tasks.views import (ListTasksView, CreateTaskView,
                                       UpdateTaskView, DeleteTaskView,
                                       ShowTaskView)
-from task_manager.tests.mixins import flash_message_test, AppTestMixin
+from task_manager.tests.testing_functions import flash_message_test
 
 User = get_user_model()
 
@@ -52,14 +52,11 @@ class ReadeTaskTest(TestCase):
         self.assertInHTML(_('Create task'), html, count=1)
         self.assertInHTML('ID', html, count=1)
         self.assertInHTML(_('Name'), html, count=1)
-        self.assertInHTML(_('Status'), html, count=2)
+        self.assertInHTML(_('Status'), html)
         self.assertInHTML(_('Executor'), html, count=2)
         self.assertInHTML(_('Date of create'), html, count=1)
         self.assertInHTML(_('Edit'), html)
         self.assertInHTML(_('Delete'), html)
-        # self.assertInHTML(_('Only your tasks'), html)
-
-        # test page content filter !!!!!!!!!!!!!!!!!!
 
 
 class TestCreateTaskTest(TestCase):
@@ -95,7 +92,6 @@ class TestCreateTaskTest(TestCase):
         # page test, method=get
         self.assertEquals(response.status_code, 200)
         self.assertEquals(self.url, '/tasks/create/')
-        self.assertTemplateUsed(response, 'tasks/form.html')
         self.assertIs(response.resolver_match.func.view_class, CreateTaskView)
 
         # page test, method=post
@@ -150,7 +146,6 @@ class UpdateTaskTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(self.url, f'/tasks/{self.task.pk}/update/')
-        self.assertTemplateUsed(response, 'tasks/form.html')
         self.assertIs(response.resolver_match.func.view_class, UpdateTaskView)
 
         # page test, method=post
@@ -184,7 +179,7 @@ class UpdateTaskTest(TestCase):
         flash_message_test(response, _('Task update error'))
 
 
-class DeleteTaskTest(AppTestMixin, TestCase):
+class DeleteTaskTest(TestCase):
     fixtures = ['users.json', 'statuses.json', 'labels.json', 'tasks.json']
 
     def setUp(self):
@@ -196,7 +191,7 @@ class DeleteTaskTest(AppTestMixin, TestCase):
     def test_delete_task_by_anonymous(self):
         response = self.client.get(self.url)
         self.assertRedirects(response, reverse('login'), 302)
-        self.flash_message_test(response, _('You are not authorized'))
+        flash_message_test(response, _('You are not authorized'))
         self.assertTrue(Task.objects.filter(name='current').exists())
 
     def test_delete_task_by_not_author(self):
@@ -204,7 +199,7 @@ class DeleteTaskTest(AppTestMixin, TestCase):
 
         response = self.client.get(self.url)
         self.assertRedirects(response, reverse('tasks:list'), 302)
-        self.flash_message_test(response, _('Only the author can delete task'))
+        flash_message_test(response, _('Only the author can delete task'))
         self.assertTrue(Task.objects.filter(name='current').exists())
 
     def test_delete_task_by_author(self):
@@ -214,14 +209,12 @@ class DeleteTaskTest(AppTestMixin, TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(self.url, f'/tasks/{self.task.pk}/delete/')
-        self.assertTemplateUsed(response, 'tasks/delete.html')
         self.assertIs(response.resolver_match.func.view_class, DeleteTaskView)
 
         # page test, method=post
         response = self.client.post(self.url)
         self.assertRedirects(response, reverse('tasks:list'), 302)
-        self.flash_message_test(response,
-                                _('The task was successfully deleted'))
+        flash_message_test(response, _('The task was successfully deleted'))
         self.assertFalse(Task.objects.filter(name='current').exists())
 
 

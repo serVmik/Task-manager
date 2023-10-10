@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from task_manager.labels.forms import LabelForm
 from task_manager.labels.models import Label
-from task_manager.tests.mixins import flash_message_test
+from task_manager.tests.testing_functions import flash_message_test
 
 User = get_user_model()
 

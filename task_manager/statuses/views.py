@@ -4,10 +4,9 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from task_manager.mixins import (
-    HandleNoPermissionMixin,
     AddMessagesToFormSubmissionMixin,
+    HandleNoPermissionMixin,
 )
-
 from task_manager.statuses.forms import StatusForm
 from task_manager.statuses.models import Status
 
@@ -29,15 +28,16 @@ class CreateStatusView(
     CreateView,
 ):
     form_class = StatusForm
-    template_name = 'statuses/form.html'
+    template_name = 'form.html'
     success_url = reverse_lazy('statuses:list')
     extra_context = {
         'title': _('Create status'),
         'btn_name': _('Create'),
     }
-    message_no_permission = _('Invalid action')
+
     success_message = _('Status successfully created')
     error_message = _('Error creating status')
+    message_no_permission = _('Invalid action')
 
 
 class UpdateStatusView(
@@ -48,12 +48,13 @@ class UpdateStatusView(
 ):
     model = Status
     form_class = StatusForm
-    template_name = 'statuses/form.html'
+    template_name = 'form.html'
     success_url = reverse_lazy('statuses:list')
     extra_context = {
         'title': _('Edit status'),
         'btn_name': _('Edit'),
     }
+
     success_message = _('Status updated successfully')
     error_message = _('Status update error')
 
@@ -72,7 +73,6 @@ class DeleteStatusView(
         'btn_name': _('Yes, delete'),
     }
 
-    protection_message = ''
     success_message = _('Status successfully deleted')
     error_message = _('Error deleting status')
     message_no_permission = _('Only the author can delete status')

@@ -13,7 +13,7 @@ class Task(models.Model):
         unique=True,
         blank=False,
         error_messages={
-            'unique': _('Such a task already exists!'),
+            'unique': _('Such a task already exists'),
         },
         help_text='<i>' + _('Required field') + '</i>',
         verbose_name=_('Name')

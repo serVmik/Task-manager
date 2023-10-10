@@ -11,21 +11,6 @@ It involves planning, testing, tracking.
 [WEB](https://task-manager-cecs.onrender.com/) version
 
 ## How to install the app:
-
-For install and use the application you will need the following applications: git, poetry. You can install them:  
-```
-sudo apt update
-```  
-```
-sudo apt install git-all
-```  
-```
-sudo apt install curl
-```  
-```
-curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 -
-```  
-
 Clone the application from GitHub and install the necessary:  
 ```
 git clone git@github.com:serVmik/python-project-52.git
@@ -37,10 +22,9 @@ cd python-project-52
 make install
 ```  
 
-Create '.env' file in the root folder and add the following variables to it:  
-Set the secret key.  
+Create '.env' file in the root folder and add the following variables to it:
 ```  
-SECRET_KEY=secret_key  
+SECRET_KEY=some_secret_key  
 DEBUG=False
 ```  
 Create migrations and apply them to the database:  

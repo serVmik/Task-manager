@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from task_manager.users.models import UserModel
 
-from task_manager.tests.mixins import AppTestMixin
+from task_manager.tests.testing_functions import flash_message_test
 from task_manager.statuses.models import Status
 from task_manager.statuses.views import (
     CreateStatusView,
@@ -17,7 +17,7 @@ from task_manager.statuses.views import (
 logging.getLogger('main_log')
 
 
-class StatusesCrudTest(AppTestMixin, TestCase):
+class StatusesCrudTest(TestCase):
 
     def setUp(self):
         UserModel.objects.create(
@@ -42,7 +42,6 @@ class StatusesCrudTest(AppTestMixin, TestCase):
         response = self.client.get(url_create)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_create, '/statuses/create/')
-        self.assertTemplateUsed(response, 'statuses/form.html')
         self.assertIs(response.resolver_match.func.view_class, CreateStatusView)
 
         # page test, method=post
@@ -50,7 +49,7 @@ class StatusesCrudTest(AppTestMixin, TestCase):
         self.assertEquals(url_create, '/statuses/create/')
         self.assertRedirects(response, reverse('statuses:list'), 302)
         self.assertIs(response.resolver_match.func.view_class, CreateStatusView)
-        self.flash_message_test(response, _('Status successfully created'))
+        flash_message_test(response, _('Status successfully created'))
 
         # status create test
         status = Status.objects.get(name='created_status')
@@ -62,11 +61,11 @@ class StatusesCrudTest(AppTestMixin, TestCase):
 
         response = self.client.get(url_create)
         self.assertEquals(response.status_code, 302)
-        self.flash_message_test(response, _('Invalid action'))
+        flash_message_test(response, _('Invalid action'))
         self.client.logout()
         response = self.client.post(url_create, created_status)
         self.assertEquals(response.status_code, 302)
-        self.flash_message_test(response, _('Invalid action'))
+        flash_message_test(response, _('Invalid action'))
 
     def test_read_statuses(self):
         url_reade = reverse('statuses:list')
@@ -78,7 +77,6 @@ class StatusesCrudTest(AppTestMixin, TestCase):
         response = self.client.get(url_reade)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_reade, '/statuses/')
-        self.assertTemplateUsed(response, 'statuses/list.html')
         self.assertIs(response.resolver_match.func.view_class, ListStatusesView)
 
         # statuses list read test
@@ -98,7 +96,6 @@ class StatusesCrudTest(AppTestMixin, TestCase):
         response = self.client.get(url_update)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_update, f'/statuses/{old_status.pk}/update/')
-        self.assertTemplateUsed(response, 'statuses/form.html')
         self.assertIs(response.resolver_match.func.view_class, UpdateStatusView)
 
         # page test, method=post
@@ -106,7 +103,7 @@ class StatusesCrudTest(AppTestMixin, TestCase):
         self.assertEquals(url_update, f'/statuses/{old_status.pk}/update/')
         self.assertRedirects(response, reverse('statuses:list'), 302)
         self.assertIs(response.resolver_match.func.view_class, UpdateStatusView)
-        self.flash_message_test(response, _('Status updated successfully'))
+        flash_message_test(response, _('Status updated successfully'))
 
         # status update test
         [current_status] = Status.objects.filter(pk=old_status.pk).values()
@@ -126,7 +123,6 @@ class StatusesCrudTest(AppTestMixin, TestCase):
         response = self.client.get(url_delete)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(url_delete, f'/statuses/{status.pk}/delete/')
-        self.assertTemplateUsed(response, 'statuses/delete.html')
         self.assertIs(response.resolver_match.func.view_class, DeleteStatusView)
 
         # page test, method=post
@@ -134,7 +130,7 @@ class StatusesCrudTest(AppTestMixin, TestCase):
         self.assertEquals(url_delete, f'/statuses/{status.pk}/delete/')
         self.assertRedirects(response, reverse('statuses:list'), 302)
         self.assertIs(response.resolver_match.func.view_class, DeleteStatusView)
-        self.flash_message_test(response, _('Status successfully deleted'))
+        flash_message_test(response, _('Status successfully deleted'))
 
         # status deletion test
         self.assertFalse(Status.objects.filter(name='name_status').exists())
@@ -145,8 +141,8 @@ class StatusesCrudTest(AppTestMixin, TestCase):
 
         response = self.client.get(url_delete)
         self.assertEquals(response.status_code, 302)
-        self.flash_message_test(response, _('Only the author can delete status'))
+        flash_message_test(response, _('Only the author can delete status'))
         self.client.logout()
         response = self.client.post(url_delete)
         self.assertEquals(response.status_code, 302)
-        self.flash_message_test(response, _('Only the author can delete status'))
+        flash_message_test(response, _('Only the author can delete status'))

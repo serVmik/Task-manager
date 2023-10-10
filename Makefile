@@ -4,9 +4,6 @@ migrate:
 	@$(MANAGE) makemigrations
 	@$(MANAGE) migrate
 
-add-data:
-	@$(MANAGE) add_test_data
-
 dev:
 	@$(MANAGE) runserver
 
@@ -22,15 +19,9 @@ lint:
 test:
 	@$(MANAGE) test task_manager/tests/
 
-test-dev:
-	@$(MANAGE) test task_manager.tests.test_end2end
-
 test-coverage:
 	poetry run coverage run --source="task_manager" manage.py test task_manager
 	poetry run coverage xml
-
-test-playwright:
-	@$(MANAGE) test task_manager.tests_playwright
 
 coverage:
 	coverage run --source='.' ./manage.py test .

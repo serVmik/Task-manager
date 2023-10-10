@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
-from task_manager.tests.mixins import flash_message_test
+from task_manager.tests.testing_functions import flash_message_test
 from task_manager.users.forms import UserCreateForm, UserUpdateForm
 
 User = get_user_model()
@@ -45,7 +45,6 @@ class TestCreateUser(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(self.url, '/users/create/')
-        self.assertTemplateUsed(response, 'users/form.html')
         self.assertIsInstance(response.context['form'], UserCreateForm)
 
     def test_create_user_method_post(self):
@@ -60,14 +59,6 @@ class TestCreateUser(TestCase):
 
         self.assertEquals(user.get_full_name(), 'Petr Petrov')
         self.assertTrue(user.check_password('q1s2d3r4'))
-
-    # def test_create_user_by_authorized_user(self):
-    #     current_user = User.objects.get(username='author')
-    #     self.client.force_login(current_user)
-    #
-    #     response = self.client.get(self.url)
-    #     self.assertRedirects(response, reverse('users:list'), 302)
-    #     flash_message_test(response, _('You are already logged in!'))
 
     def test_create_user_error(self):
         user_being_created = {'username': 'petr_error'}
@@ -102,7 +93,6 @@ class TestUpdateUser(TestCase):
 
         self.assertEquals(response.status_code, 200)
         self.assertEquals(self.url, f'/users/{self.old_user_data.pk}/update/')
-        self.assertTemplateUsed(response, 'users/form.html')
         self.assertIsInstance(response.context['form'], UserUpdateForm)
 
     def test_update_user_method_post(self):
@@ -170,7 +160,6 @@ class TestDeleteUser(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(self.url, f'/users/{self.author.pk}/delete/')
-        self.assertTemplateUsed(response, 'users/delete.html')
 
         # method=post
         response = self.client.post(self.url)

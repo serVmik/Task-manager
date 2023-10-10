@@ -58,8 +58,9 @@ class CreateTaskView(
     success_url = reverse_lazy('tasks:list')
     extra_context = {
         'title': _('Create task'),
+        'btn_name': _('Create'),
     }
-    success_message = _('Task added successfully')
+    success_message = _('Task created successfully')
     error_message = _('Error adding task')
     message_no_permission = _('You are not authorized')
     logger_no_permission = _('The action was taken by an unauthorized user')
@@ -81,9 +82,10 @@ class UpdateTaskView(
     template_name = 'tasks/form.html'
     success_url = reverse_lazy('tasks:list')
     extra_context = {
-        'title': _('Update task')
+        'title': _('Changing a task'),
+        'btn_name': _('Change')
     }
-    success_message = _('Task successfully updated')
+    success_message = _('The task was successfully modified')
     error_message = _('Task update error')
     message_no_permission = _('You are not authorized')
     logger_no_permission = _('The action was taken by an unauthorized user')
@@ -98,5 +100,9 @@ class DeleteTaskView(
     model = Task
     template_name = 'tasks/delete.html'
     success_url = reverse_lazy('tasks:list')
+    extra_context = {
+        'title': _('Deleting a task'),
+        'btn_name': _('Yes, delete'),
+    }
     success_message = _('The task was successfully deleted')
     message_no_permission = _('Only the author can delete task')

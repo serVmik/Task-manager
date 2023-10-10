@@ -29,15 +29,14 @@ whitenoise = "^6.5.0"
 psycopg2-binary = "^2.9.9"
 gunicorn = "^21.2.0"
 django-filter = "^23.3"
-rollbar = "^0.16.3"
 
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.1.0"
 pytest = "^7.4.2"
 coverage = "^7.3.1"
-pytest-playwright = "^0.4.3"
-playwright = "^1.38.0"
+pytest-cov = "^4.1.0"
+rollbar = "^0.16.3"
 
 [build-system]
 requires = ["poetry-core"]

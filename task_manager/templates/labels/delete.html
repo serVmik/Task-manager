@@ -9,11 +9,11 @@
     {% trans 'Delete label' %}
     {% endblock title %}
   </h1>
-  <p>{% trans 'Delete?' %}</p>
+  <p>{% trans 'Are you sure you want to delete' %} {{ label.name }}?</p>
   <form method="post">
     {% csrf_token %}
     {% bootstrap_form form %}
-    <button type="submit" class="btn btn-danger">{% trans 'Yes, delete!' %}</button>
+    <button type="submit" class="btn btn-danger">{{ btn_name }}</button>
   </form>
 </div>
 

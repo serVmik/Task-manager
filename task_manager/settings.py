@@ -1,12 +1,11 @@
+import dj_database_url
+import os
+from dotenv import load_dotenv
 from pathlib import Path
 
 from django.utils.translation import gettext_lazy as _
 
-import os
-# import dj_database_url
-from dotenv import load_dotenv
-
-from .logging_formatters import CustomJsonFormatter
+from task_manager.logging_formatters import CustomJsonFormatter
 
 load_dotenv()
 
@@ -20,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -28,7 +27,6 @@ ALLOWED_HOSTS = [
     '.onrender.com',
     'localhost',
 ]
-
 
 # Application definition
 
@@ -121,7 +119,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -132,22 +129,20 @@ DATABASES = {
     }
 }
 
-# DATABASES['default'].update(
-#     dj_database_url.config(conn_max_age=600)
-# )
+DATABASES['default'].update(
+    dj_database_url.config(conn_max_age=600)
+)
 
 # User
 # https://docs.djangoproject.com/en/4.1/topics/auth/customizing/#substituting-a-custom-user-model
 AUTH_USER_MODEL = 'users.UserModel'
 
 # https://docs.djangoproject.com/en/4.2/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = 'home'
-
 # https://docs.djangoproject.com/en/4.2/ref/settings/#login-url
 LOGIN_URL = 'login'
-
-# LOGOUT_URL = 'home'
-# LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_URL = 'home'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -167,16 +162,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
-
 LANGUAGE_CODE = 'ru'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 # https://docs.djangoproject.com/en/4.1/ref/settings/#languages
@@ -196,6 +186,8 @@ LOCALE_PATHS = [
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

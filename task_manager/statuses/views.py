@@ -32,7 +32,8 @@ class CreateStatusView(
     template_name = 'statuses/form.html'
     success_url = reverse_lazy('statuses:list')
     extra_context = {
-        'title': _('Create status')
+        'title': _('Create status'),
+        'btn_name': _('Create'),
     }
     message_no_permission = _('Invalid action')
     success_message = _('Status successfully created')
@@ -50,7 +51,8 @@ class UpdateStatusView(
     template_name = 'statuses/form.html'
     success_url = reverse_lazy('statuses:list')
     extra_context = {
-        'title': _('Edit status')
+        'title': _('Edit status'),
+        'btn_name': _('Edit'),
     }
     success_message = _('Status updated successfully')
     error_message = _('Status update error')
@@ -65,6 +67,11 @@ class DeleteStatusView(
     model = Status
     template_name = 'statuses/delete.html'
     success_url = reverse_lazy('statuses:list')
+    extra_context = {
+        'title': _('Delete status'),
+        'btn_name': _('Yes, delete'),
+    }
+
     protection_message = ''
     success_message = _('Status successfully deleted')
     error_message = _('Error deleting status')

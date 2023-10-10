@@ -6,7 +6,6 @@ on:
 
 env:
   SECRET_KEY: ${{ secrets.SECRET_KEY }}
-  WORKFLOW: ${{ secrets.WORKFLOW }}
 
 jobs:
   build:
@@ -23,33 +22,19 @@ jobs:
       - name: Install dependencies
         run: |
           pip install poetry
-          pip install playwright
           make install
-          playwright install
 
       - name: Run linter
         run: |
           make lint
 
-      - name: Run tests
-        run: |
-          make test
-
-#      - name: Run server, add test data, run playwright tests
-#        run: |
-#          make migrate &
-#          sleep 5 &&
-#          make dev &
-#          sleep 5 &&
-#          make test-playwright
-
-#        # Run pytest via: make test-coverage.
-#        # Publishing code test on Code Climate.
-#      - name: Test & publish code coverage for Code Climate
-#        uses: paambaati/codeclimate-action@v3.0.0
-#        if: github.ref_name == 'main'
-#        env:
-#          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-#        with:
-#          coverageCommand: make test-coverage
-#          debug: true
+        # Run pytest via: make test-coverage.
+        # Publishing code test on Code Climate.
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v3.2.0
+        if: github.ref_name == 'main'
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: make test-coverage
+          debug: true

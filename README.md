@@ -1,5 +1,7 @@
 [![Actions Status](https://github.com/serVmik/python-project-52/workflows/hexlet-check/badge.svg)](https://github.com/serVmik/python-project-52/actions)
 [![Python CI](https://github.com/serVmik/python-project-52/actions/workflows/pici.yml/badge.svg)](https://github.com/serVmik/python-project-52/actions/workflows/pici.yml)
+<a href="https://codeclimate.com/github/serVmik/python-project-52/maintainability"><img src="https://api.codeclimate.com/v1/badges/ad45895325c9ef37b952/maintainability" /></a>
+<a href="https://codeclimate.com/github/serVmik/python-project-52/test_coverage"><img src="https://api.codeclimate.com/v1/badges/ad45895325c9ef37b952/test_coverage" /></a>
 
 # Task manager
 

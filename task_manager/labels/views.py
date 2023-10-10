@@ -31,7 +31,8 @@ class CreateLabelView(
     template_name = 'labels/form.html'
     success_url = reverse_lazy('labels:list')
     extra_context = {
-        'title': _('Create'),
+        'title': _('Create label'),
+        'btn_name': _('Create'),
     }
     success_message = _('Label created successfully')
     error_message = _('Error creating label')
@@ -48,7 +49,8 @@ class UpdateLabelView(
     template_name = 'labels/form.html'
     success_url = reverse_lazy('labels:list')
     extra_context = {
-        'title': _('Update'),
+        'title': _('Edit label'),
+        'btn_name': _('Edit'),
     }
     success_message = _('Label updated successfully')
     error_message = _('Label update error')
@@ -64,6 +66,10 @@ class DeleteLabelView(
     model = Label
     template_name = 'labels/delete.html'
     success_url = reverse_lazy('labels:list')
+    extra_context = {
+        'title': _('Delete label'),
+        'btn_name': _('Yes, delete'),
+    }
     success_message = _('Label deleted successfully')
     error_message = _('Label delete error')
     protected_message = _('Cannot delete label because it is in use')

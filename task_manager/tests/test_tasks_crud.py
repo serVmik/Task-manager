@@ -104,7 +104,7 @@ class TestCreateTaskTest(TestCase):
         self.assertTrue(Task.objects.filter(name='created task').exists())
         self.assertEquals(self.url, '/tasks/create/')
         self.assertRedirects(response, reverse('tasks:list'), 302)
-        flash_message_test(response, _('Task added successfully'))
+        flash_message_test(response, _('Task created successfully'))
 
     def test_create_task_with_error(self):
         self.client.force_login(self.author)
@@ -157,7 +157,7 @@ class UpdateTaskTest(TestCase):
         response = self.client.post(self.url, self.updated_data)
         self.assertEquals(self.url, f'/tasks/{self.task.pk}/update/')
         self.assertRedirects(response, reverse('tasks:list'), 302)
-        flash_message_test(response, _('Task successfully updated'))
+        flash_message_test(response, _('The task was successfully modified'))
 
     def test_updated_data_task(self):
         self.client.force_login(self.not_author)

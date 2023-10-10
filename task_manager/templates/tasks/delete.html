@@ -11,11 +11,11 @@
   {% endblock %}
 </h1>
 
-<p>{% trans 'Delete?' %}</p>
+<p>{% trans 'Are you sure you want to delete' %} {{ task.name }}?</p>
 <form method="post">
   {% csrf_token %}
   {% bootstrap_form form %}
-  <button type="submit" class="btn btn-danger">{% trans 'Yes, delete!' %}</button>
+  <button type="submit" class="btn btn-danger">{% trans 'Yes, delete' %}</button>
 </form>
 </div><!-- End Task Delete Content -->
 {% endblock %}

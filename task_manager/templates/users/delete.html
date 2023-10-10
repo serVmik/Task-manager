@@ -7,15 +7,15 @@
 <div class="card bg-light p-3">
 <h1>
   {% block title %}
-  {% trans 'Delete' %}
+  {{ title }}
   {% endblock %}
 </h1>
 
-<p>{% trans 'Delete?' %}</p>
+<p>{% trans 'Are you sure you want to delete' %} {{ user.get_full_name }}?</p>
 <form method="post">
   {% csrf_token %}
   {% bootstrap_form form %}
-  <button type="submit" class="btn btn-danger">{% trans 'Yes, delete!' %}</button>
+  <button type="submit" class="btn btn-danger">{% trans 'Yes, delete' %}</button>
 </form>
 </div><!-- End User Delete Content -->
 {% endblock %}

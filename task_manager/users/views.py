@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from .forms import UserCreateForm, UserUpdateForm
 from .models import UserModel
 from ..mixins import (
-    NotLoginRequiredMixin,
+    # NotLoginRequiredMixin,
     HandleNoPermissionMixin,
     CheckUserForOwnershipAccountMixin,
     AddMessagesToFormSubmissionMixin,
@@ -21,7 +21,7 @@ class ListUsersView(ListView):
 
 class CreateUserView(
     HandleNoPermissionMixin,
-    NotLoginRequiredMixin,
+    # NotLoginRequiredMixin,
     AddMessagesToFormSubmissionMixin,
     CreateView,
 ):
@@ -30,10 +30,11 @@ class CreateUserView(
     success_url = reverse_lazy('login')
     extra_context = {
         'title': _('Registration'),
+        'button_name': _('Register'),
     }
-    success_message = _('User is registered')
+    success_message = _('User successfully registered')
     error_message = _('User registration error')
-    message_no_permission = _('You are already logged in!')
+    message_no_permission = _('You are already logged in')
     url_no_permission = reverse_lazy('users:list')
 
 
@@ -49,8 +50,9 @@ class UpdateUserView(
     success_url = reverse_lazy('users:list')
     extra_context = {
         'title': _('Edit user'),
+        'button_name': _('Edit'),
     }
-    success_message = _('User data updated')
+    success_message = _('User successfully updated')
     error_message = _('User update error')
     message_no_permission = _('Only the owner can update users data')
     url_no_permission = reverse_lazy('users:list')
@@ -66,7 +68,10 @@ class DeleteUserView(
     model = UserModel
     template_name = 'users/delete.html'
     success_url = reverse_lazy('users:list')
-    success_message = _('User deleted')
+    extra_context = {
+        'title': _('Deleting a user'),
+    }
+    success_message = _('User deleted successfully')
     error_message = _('User deletion error')
     message_no_permission = _('Only the owner can delete account')
     protected_message = _('Cannot delete user because it is in use')

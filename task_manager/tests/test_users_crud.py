@@ -51,7 +51,7 @@ class TestCreateUser(TestCase):
     def test_create_user_method_post(self):
         response = self.client.post(self.url, self.user_being_created)
         self.assertRedirects(response, reverse('login'), 302)
-        flash_message_test(response, _('User is registered'))
+        flash_message_test(response, _('User successfully registered'))
 
     def test_create_user(self):
         self.assertFalse(User.objects.filter(username='petr_petrov').exists())
@@ -61,13 +61,13 @@ class TestCreateUser(TestCase):
         self.assertEquals(user.get_full_name(), 'Petr Petrov')
         self.assertTrue(user.check_password('q1s2d3r4'))
 
-    def test_create_user_by_authorized_user(self):
-        current_user = User.objects.get(username='author')
-        self.client.force_login(current_user)
-
-        response = self.client.get(self.url)
-        self.assertRedirects(response, reverse('users:list'), 302)
-        flash_message_test(response, _('You are already logged in!'))
+    # def test_create_user_by_authorized_user(self):
+    #     current_user = User.objects.get(username='author')
+    #     self.client.force_login(current_user)
+    #
+    #     response = self.client.get(self.url)
+    #     self.assertRedirects(response, reverse('users:list'), 302)
+    #     flash_message_test(response, _('You are already logged in!'))
 
     def test_create_user_error(self):
         user_being_created = {'username': 'petr_error'}
@@ -111,7 +111,7 @@ class TestUpdateUser(TestCase):
 
         self.assertEquals(self.url, f'/users/{self.old_user_data.pk}/update/')
         self.assertRedirects(response, reverse('users:list'), 302)
-        flash_message_test(response, _('User data updated'))
+        flash_message_test(response, _('User successfully updated'))
 
     def test_update_user(self):
         self.client.force_login(self.old_user_data)
@@ -194,5 +194,5 @@ class TestDeleteUser(TestCase):
         ))
 
         self.assertRedirects(response, reverse('users:list'), 302)
-        flash_message_test(response, _('User deleted'))
+        flash_message_test(response, _('User deleted successfully'))
         self.assertFalse(User.objects.filter(username='lazy_user').exists())

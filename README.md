@@ -52,3 +52,8 @@ Only a registered user can create, view and change tasks, statuses and labels fo
 
 ### Create tasks and view all tasks together with other users.  
 Implemented task filtering based on several criteria.
+![create_task](https://github.com/serVmik/python-project-52/assets/56305558/1a575a91-d62e-4a90-9b77-684203f2ddfd)
+
+### View each task in detail separately
+![create_show](https://github.com/serVmik/python-project-52/assets/56305558/b4332c29-9fb8-446c-8fc7-cab5437a817d)
+

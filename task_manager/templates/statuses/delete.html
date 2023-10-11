@@ -4,17 +4,17 @@
 
 {% block content%}
 <div class="card bg-light p-3">
-<h1>
-  {% block title %}
-  {{ title }}
-  {% endblock title %}
-</h1>
+  <h1>
+    {% block title %}
+    {{ title }}
+    {% endblock title %}
+  </h1>
 
-<p>{% trans 'Are you sure you want to delete' %} {{ status.name }}?</p>
-<form method="post">
-  {% csrf_token %}
-  {% bootstrap_form form %}
-  {% bootstrap_button btn_name button_type='submit' button_class='btn btn-danger' %}
-</form>
+  <p>{% trans 'Are you sure you want to delete' %} {{ status.name }}?</p>
+  <form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% bootstrap_button btn_name button_type='submit' button_class='btn btn-danger' %}
+  </form>
 </div>
 {% endblock %}

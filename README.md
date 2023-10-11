@@ -16,9 +16,6 @@ Clone the application from GitHub and install the necessary:
 git clone git@github.com:serVmik/python-project-52.git
 ```    
 ```
-cd python-project-52
-```  
-```
 make install
 ```  
 
@@ -39,11 +36,19 @@ make dev
 
 Go to the browser address http://localhost:8000/  
 ## How to use the app:  
+
+### Home page
+![home](https://github.com/serVmik/python-project-52/assets/56305558/bbdcef86-88f4-42c0-9e87-725d98e4b979)
+
 ### Registration
 Only a registered user can create, view and change tasks, statuses and labels for tasks. 
+![create_user](https://github.com/serVmik/python-project-52/assets/56305558/a2cd4700-2b8e-4926-836b-758f9dd346bd)
 
-### Tasks list
+### View the full list of users
+![users_auth](https://github.com/serVmik/python-project-52/assets/56305558/657650a3-40e0-49a4-a109-077d5a3c177f)
 
-### Create task
+### Create statuses and labels by name only
+![create_label](https://github.com/serVmik/python-project-52/assets/56305558/dea27d7f-9c7f-42cc-a25f-a38e6d311b6f)
 
-### Update task
+### Create tasks and view all tasks together with other users.  
+Implemented task filtering based on several criteria.

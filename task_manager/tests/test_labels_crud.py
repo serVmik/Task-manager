@@ -24,10 +24,6 @@ class TestReadLabelsList(TestCase):
         self.assertInHTML(str(label.pk), html)
         self.assertInHTML(str(label.name), html)
         self.assertInHTML(label.created_at.strftime('%d-%m-%Y %H:%M'), html)
-        # self.assertQuerysetEqual(
-        #     response.context['labels'].order_by('id'),
-        #     context_object.order_by('id')
-        # )
 
     def test_read_labels_list_by_guest(self):
         response = self.client.get(reverse_lazy('labels:list'))

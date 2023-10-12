@@ -7,16 +7,15 @@ from ..tasks.models import Task
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'first_name', 'last_name',
-                    'date_joined')
+    list_display = ('id', 'username', 'first_name',
+                    'last_name', 'date_joined')
     list_display_links = ('id', 'username')
     search_fields = ('username', 'first_name', 'last_name',)
     list_filter = ('date_joined',)
 
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'status', 'author', 'executor',
-                    'created_at')
+    list_display = ('id', 'name', 'status', 'author', 'executor', 'created_at')
     list_display_links = ('name', 'status', 'author', 'executor')
     search_fields = ('name',)
     list_filter = ('created_at', 'labels')

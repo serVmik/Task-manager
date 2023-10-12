@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-10 23:08+0000\n"
+"POT-Creation-Date: 2023-10-12 16:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,74 +22,70 @@ msgstr ""
 
 #: task_manager/labels/models.py:11 task_manager/statuses/models.py:10
 #: task_manager/tasks/models.py:19 task_manager/templates/labels/list.html:22
-#: task_manager/templates/list.html:33
 #: task_manager/templates/statuses/list.html:22
 #: task_manager/templates/tasks/list.html:31
 #: task_manager/tests/test_tasks_crud.py:54
 msgid "Name"
 msgstr "Имя"
 
-#: task_manager/labels/views.py:34 task_manager/templates/labels/list.html:14
+#: task_manager/labels/views.py:35 task_manager/templates/labels/list.html:14
 msgid "Create label"
 msgstr "Создать метку"
 
-#: task_manager/labels/views.py:35 task_manager/statuses/views.py:36
-#: task_manager/tasks/views.py:56
+#: task_manager/labels/views.py:36 task_manager/statuses/views.py:35
+#: task_manager/tasks/views.py:57
 msgid "Create"
 msgstr "Создать"
 
-#: task_manager/labels/views.py:37 task_manager/tests/test_labels_crud.py:60
+#: task_manager/labels/views.py:39 task_manager/tests/test_labels_crud.py:56
 msgid "Label created successfully"
 msgstr "Метка успешно создана"
 
-#: task_manager/labels/views.py:38 task_manager/tests/test_labels_crud.py:75
+#: task_manager/labels/views.py:40 task_manager/tests/test_labels_crud.py:71
 msgid "Error creating label"
 msgstr "Ошибка создания метки"
 
-#: task_manager/labels/views.py:52
+#: task_manager/labels/views.py:54
 msgid "Edit label"
 msgstr "Изменить метку"
 
-#: task_manager/labels/views.py:53 task_manager/statuses/views.py:55
+#: task_manager/labels/views.py:55 task_manager/statuses/views.py:55
 #: task_manager/templates/labels/list.html:35
-#: task_manager/templates/list.html:57
 #: task_manager/templates/statuses/list.html:35
 #: task_manager/templates/tasks/list.html:55
 #: task_manager/templates/tasks/show.html:69
 #: task_manager/tests/test_tasks_crud.py:58
-#: task_manager/tests/test_tasks_crud.py:247 task_manager/users/views.py:55
+#: task_manager/tests/test_tasks_crud.py:240 task_manager/users/views.py:55
 msgid "Edit"
 msgstr "Изменить"
 
-#: task_manager/labels/views.py:55 task_manager/tests/test_labels_crud.py:97
+#: task_manager/labels/views.py:58 task_manager/tests/test_labels_crud.py:93
 msgid "Label updated successfully"
 msgstr "Метка успешно изменена"
 
-#: task_manager/labels/views.py:56 task_manager/tests/test_labels_crud.py:105
+#: task_manager/labels/views.py:59 task_manager/tests/test_labels_crud.py:101
 msgid "Label update error"
 msgstr "Ошибка обновления метки"
 
-#: task_manager/labels/views.py:70 task_manager/templates/labels/delete.html:9
+#: task_manager/labels/views.py:74
 msgid "Delete label"
 msgstr "Удалить метку"
 
-#: task_manager/labels/views.py:71 task_manager/statuses/views.py:72
-#: task_manager/tasks/views.py:100
-#: task_manager/templates/statuses/delete.html:17
-#: task_manager/templates/tasks/delete.html:18
+#: task_manager/labels/views.py:75 task_manager/statuses/views.py:73
+#: task_manager/tasks/views.py:101 task_manager/templates/tasks/delete.html:18
 #: task_manager/templates/users/delete.html:18
 msgid "Yes, delete"
 msgstr "Да, удалить"
 
-#: task_manager/labels/views.py:73 task_manager/tests/test_labels_crud.py:133
+#: task_manager/labels/views.py:78 task_manager/tests/test_labels_crud.py:129
 msgid "Label deleted successfully"
 msgstr "Метка успешно удалена"
 
-#: task_manager/labels/views.py:74
+#: task_manager/labels/views.py:79
 msgid "Label delete error"
 msgstr "Ошибка удаления метки"
 
-#: task_manager/labels/views.py:75 task_manager/tests/test_labels_crud.py:145
+#: task_manager/labels/views.py:80 task_manager/tests/test_labels_crud.py:141
 msgid "Cannot delete label because it is in use"
 msgstr "Нельзя удалить метку, пока она используется"
 
@@ -101,45 +97,45 @@ msgstr "Русский"
 msgid "English"
 msgstr "English"
 
-#: task_manager/statuses/views.py:35
+#: task_manager/statuses/views.py:34
 #: task_manager/templates/statuses/list.html:14
 msgid "Create status"
 msgstr "Создать статус"
 
 #: task_manager/statuses/views.py:38
-#: task_manager/tests/test_statuses_crud.py:65
-#: task_manager/tests/test_statuses_crud.py:69
-msgid "Invalid action"
-msgstr "Недопустимое действие"
-
-#: task_manager/statuses/views.py:39
-#: task_manager/tests/test_statuses_crud.py:53
+#: task_manager/tests/test_statuses_crud.py:52
 msgid "Status successfully created"
 msgstr "Статус успешно создан"
 
-#: task_manager/statuses/views.py:40
+#: task_manager/statuses/views.py:39
 msgid "Error creating status"
 msgstr "Ошибка создания статуса"
+
+#: task_manager/statuses/views.py:40
+#: task_manager/tests/test_statuses_crud.py:64
+#: task_manager/tests/test_statuses_crud.py:68
+msgid "Invalid action"
+msgstr "Недопустимое действие"
 
 #: task_manager/statuses/views.py:54
 msgid "Edit status"
 msgstr "Изменить статус"
 
-#: task_manager/statuses/views.py:57
-#: task_manager/tests/test_statuses_crud.py:109
+#: task_manager/statuses/views.py:58
+#: task_manager/tests/test_statuses_crud.py:106
 msgid "Status updated successfully"
 msgstr "Статус успешно изменен"
 
-#: task_manager/statuses/views.py:58
+#: task_manager/statuses/views.py:59
 msgid "Status update error"
 msgstr "Ошибка изменения статуса"
 
-#: task_manager/statuses/views.py:71
+#: task_manager/statuses/views.py:72
 msgid "Delete status"
 msgstr "Удалить статус"
 
 #: task_manager/statuses/views.py:76
-#: task_manager/tests/test_statuses_crud.py:137
+#: task_manager/tests/test_statuses_crud.py:133
 msgid "Status successfully deleted"
 msgstr "Статус успешно удален"
 
@@ -148,8 +144,8 @@ msgid "Error deleting status"
 msgstr "Ошибка удаления статуса"
 
 #: task_manager/statuses/views.py:78
+#: task_manager/tests/test_statuses_crud.py:144
 #: task_manager/tests/test_statuses_crud.py:148
-#: task_manager/tests/test_statuses_crud.py:152
 msgid "Only the author can delete status"
 msgstr "Только автор статуса может удалить статус"
 
@@ -171,10 +167,9 @@ msgstr "Обязательное поле"
 
 #: task_manager/tasks/models.py:23 task_manager/templates/tasks/show.html:21
 msgid "Description"
-msgstr "описание"
+msgstr "Описание"
 
-#: task_manager/tasks/models.py:29 task_manager/templates/list.html:34
-#: task_manager/templates/tasks/list.html:32
+#: task_manager/tasks/models.py:29 task_manager/templates/tasks/list.html:32
 #: task_manager/templates/tasks/show.html:43
 #: task_manager/tests/test_tasks_crud.py:55
 msgid "Status"
@@ -187,14 +182,12 @@ msgstr "Статус"
 msgid "Labels"
 msgstr "Метки"
 
-#: task_manager/tasks/models.py:41 task_manager/templates/list.html:35
-#: task_manager/templates/tasks/list.html:33
+#: task_manager/tasks/models.py:41 task_manager/templates/tasks/list.html:33
 #: task_manager/templates/tasks/show.html:27
 msgid "Author"
 msgstr "Автор"
 
-#: task_manager/tasks/models.py:47 task_manager/templates/list.html:36
-#: task_manager/templates/tasks/list.html:34
+#: task_manager/tasks/models.py:47 task_manager/templates/tasks/list.html:34
 #: task_manager/templates/tasks/show.html:32
 #: task_manager/tests/test_tasks_crud.py:56
 msgid "Executor"
@@ -206,65 +199,64 @@ msgstr "Исполнитель"
 msgid "Date of creation"
 msgstr "Дата регистрации"
 
-#: task_manager/tasks/views.py:30 task_manager/tasks/views.py:42
-#: task_manager/tasks/views.py:61 task_manager/tasks/views.py:86
-#: task_manager/tests/test_labels_crud.py:35
-#: task_manager/tests/test_labels_crud.py:66
-#: task_manager/tests/test_labels_crud.py:111
-#: task_manager/tests/test_labels_crud.py:152
+#: task_manager/tasks/views.py:31 task_manager/tasks/views.py:43
+#: task_manager/tasks/views.py:62 task_manager/tasks/views.py:87
+#: task_manager/tests/test_labels_crud.py:31
+#: task_manager/tests/test_labels_crud.py:62
+#: task_manager/tests/test_labels_crud.py:107
+#: task_manager/tests/test_labels_crud.py:148
 #: task_manager/tests/test_tasks_crud.py:27
-#: task_manager/tests/test_tasks_crud.py:89
-#: task_manager/tests/test_tasks_crud.py:144
-#: task_manager/tests/test_tasks_crud.py:199
-#: task_manager/tests/test_tasks_crud.py:261
-#: task_manager/tests/test_users_crud.py:153
+#: task_manager/tests/test_tasks_crud.py:86
+#: task_manager/tests/test_tasks_crud.py:140
+#: task_manager/tests/test_tasks_crud.py:194
+#: task_manager/tests/test_tasks_crud.py:254
+#: task_manager/tests/test_users_crud.py:143
 msgid "You are not authorized"
 msgstr "Вы не авторизованы"
 
-#: task_manager/tasks/views.py:55 task_manager/templates/list.html:14
-#: task_manager/templates/tasks/list.html:14
+#: task_manager/tasks/views.py:56 task_manager/templates/tasks/list.html:14
 #: task_manager/tests/test_tasks_crud.py:52
 msgid "Create task"
 msgstr "Создать задачу"
 
-#: task_manager/tasks/views.py:59 task_manager/tests/test_tasks_crud.py:107
+#: task_manager/tasks/views.py:60 task_manager/tests/test_tasks_crud.py:103
 msgid "Task created successfully"
 msgstr "Задача успешно создана"
 
-#: task_manager/tasks/views.py:60 task_manager/tests/test_tasks_crud.py:113
+#: task_manager/tasks/views.py:61 task_manager/tests/test_tasks_crud.py:109
 msgid "Error adding task"
 msgstr "Ошибка добавления задачи"
 
-#: task_manager/tasks/views.py:80
+#: task_manager/tasks/views.py:81
 msgid "Changing a task"
 msgstr "Изменение задачи"
 
-#: task_manager/tasks/views.py:81 task_manager/templates/users/list.html:35
+#: task_manager/tasks/views.py:82 task_manager/templates/users/list.html:35
 msgid "Change"
 msgstr "Изменить"
 
-#: task_manager/tasks/views.py:84 task_manager/tests/test_tasks_crud.py:160
+#: task_manager/tasks/views.py:85 task_manager/tests/test_tasks_crud.py:155
 msgid "The task was successfully modified"
 msgstr "Задача успешно изменена"
 
-#: task_manager/tasks/views.py:85 task_manager/tests/test_tasks_crud.py:184
+#: task_manager/tasks/views.py:86 task_manager/tests/test_tasks_crud.py:179
 msgid "Task update error"
 msgstr "Ошибка обновления задачи"
 
-#: task_manager/tasks/views.py:99
+#: task_manager/tasks/views.py:100
 msgid "Deleting a task"
 msgstr "Удаление задачи"
 
-#: task_manager/tasks/views.py:103 task_manager/tests/test_tasks_crud.py:224
+#: task_manager/tasks/views.py:104 task_manager/tests/test_tasks_crud.py:217
 msgid "The task was successfully deleted"
 msgstr "Задача успешно удалена"
 
-#: task_manager/tasks/views.py:104 task_manager/tests/test_tasks_crud.py:207
+#: task_manager/tasks/views.py:105 task_manager/tests/test_tasks_crud.py:202
 msgid "Only the author can delete task"
 msgstr "Только автор задачи может удалить задачу"
 
 #: task_manager/templates/components/navigation.html:7
-#: task_manager/templates/home.html:16
+#: task_manager/templates/home.html:15
 msgid "Task manager"
 msgstr "Менеджер задач"
 
@@ -298,11 +290,11 @@ msgstr "Регистрация"
 msgid "Login"
 msgstr "Вход"
 
-#: task_manager/templates/home.html:19
+#: task_manager/templates/home.html:18
 msgid "Hello!"
 msgstr "Привет!"
 
-#: task_manager/templates/labels/delete.html:12
+#: task_manager/templates/labels/delete.html:13
 #: task_manager/templates/statuses/delete.html:13
 #: task_manager/templates/tasks/delete.html:14
 #: task_manager/templates/users/delete.html:14
@@ -310,33 +302,30 @@ msgid "Are you sure you want to delete"
 msgstr "Вы уверены, что хотите удалить"
 
 #: task_manager/templates/labels/list.html:36
-#: task_manager/templates/list.html:58
 #: task_manager/templates/statuses/list.html:36
 #: task_manager/templates/tasks/list.html:56
 #: task_manager/templates/tasks/show.html:71
 #: task_manager/templates/users/list.html:36
 #: task_manager/tests/test_tasks_crud.py:59
-#: task_manager/tests/test_tasks_crud.py:248
+#: task_manager/tests/test_tasks_crud.py:241
 msgid "Delete"
 msgstr "Удалить"
-
-#: task_manager/templates/list.html:21
-#: task_manager/templates/tasks/list.html:20
-msgid "Show"
-msgstr "Показать"
-
-#: task_manager/templates/list.html:37
-#: task_manager/templates/tasks/list.html:35
-#: task_manager/tests/test_tasks_crud.py:57
-msgid "Date of create"
-msgstr "Дата регистрации"
 
 #: task_manager/templates/login.html:17
 msgid "Sign in"
 msgstr "Войти"
 
+#: task_manager/templates/tasks/list.html:20
+msgid "Show"
+msgstr "Показать"
+
+#: task_manager/templates/tasks/list.html:35
+#: task_manager/tests/test_tasks_crud.py:57
+msgid "Date of create"
+msgstr "Дата регистрации"
+
 #: task_manager/templates/tasks/show.html:8
-#: task_manager/tests/test_tasks_crud.py:246
+#: task_manager/tests/test_tasks_crud.py:239
 msgid "View a task"
 msgstr "Отобразить задачу"
 
@@ -360,31 +349,31 @@ msgstr "Имя пользователя"
 msgid "Full name"
 msgstr "Полное имя"
 
-#: task_manager/tests/test_users_crud.py:54 task_manager/users/views.py:37
+#: task_manager/tests/test_users_crud.py:53 task_manager/users/views.py:37
 msgid "User successfully registered"
 msgstr "Пользователь успешно зарегистрирован"
 
-#: task_manager/tests/test_users_crud.py:77 task_manager/users/views.py:38
+#: task_manager/tests/test_users_crud.py:68 task_manager/users/views.py:38
 msgid "User registration error"
 msgstr "Ошибка регистрации пользователя"
 
-#: task_manager/tests/test_users_crud.py:114 task_manager/users/views.py:58
+#: task_manager/tests/test_users_crud.py:104 task_manager/users/views.py:58
 msgid "User successfully updated"
 msgstr "Пользователь успешно изменен"
 
-#: task_manager/tests/test_users_crud.py:139 task_manager/users/views.py:60
+#: task_manager/tests/test_users_crud.py:129 task_manager/users/views.py:60
 msgid "Only the owner can update users data"
 msgstr "Только пользователь может обновлять свои данные"
 
-#: task_manager/tests/test_users_crud.py:160 task_manager/users/views.py:80
+#: task_manager/tests/test_users_crud.py:150 task_manager/users/views.py:80
 msgid "Only the owner can delete account"
 msgstr "Только сам собственник аккаунта может удалить аккаунт"
 
-#: task_manager/tests/test_users_crud.py:180 task_manager/users/views.py:81
+#: task_manager/tests/test_users_crud.py:169 task_manager/users/views.py:81
 msgid "Cannot delete user because it is in use"
 msgstr "Нельзя удалить пользователя, пока он используется"
 
-#: task_manager/tests/test_users_crud.py:197 task_manager/users/views.py:78
+#: task_manager/tests/test_users_crud.py:186 task_manager/users/views.py:78
 msgid "User deleted successfully"
 msgstr "Пользователь успешно удален"
 

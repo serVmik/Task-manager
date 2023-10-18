@@ -1,14 +1,16 @@
 .env
-.coverage
 logging.log
-coverage.xml
 db.sqlite3
 .idea/
 dist/
 __pycache__/
-htmlcov/
 
+.coverage
 .coveragerc
+coverage.xml
+htmlcov/
 tests_end2end/
+pytest_cache/
+
 management/
 test_data.py

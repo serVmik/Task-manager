@@ -129,9 +129,13 @@ DATABASES = {
     }
 }
 
-DATABASES['default'].update(
-    dj_database_url.config(conn_max_age=600)
-)
+if not DEBUG:
+    DATABASES['default'].update(
+        dj_database_url.config(conn_max_age=600)
+    )
+
+# End Database
+
 
 # User
 # https://docs.djangoproject.com/en/4.1/topics/auth/customizing/#substituting-a-custom-user-model

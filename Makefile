@@ -1,8 +1,5 @@
 MANAGE := poetry run ./manage.py
 
-migrate:
-	@$(MANAGE) makemigrations
-	@$(MANAGE) migrate
 
 dev:
 	@$(MANAGE) runserver
@@ -44,5 +41,27 @@ publish:
 
 package-install:
 	python3 -m pip install dist/*.whl
+
+
+dry:
+	@$(MANAGE) makemigrations --dry-run
+
+mmigrate:
+	@$(MANAGE) makemigrations
+
+migrate:
+	@$(MANAGE) migrate
+
+.PHONY: static
+static:
+	@$(MANAGE) collectstatic
+
+
+shell:
+	@$(MANAGE) shell_plus --ipython
+
+notebook:
+	@$(MANAGE) shell_plus --notebook
+
 
 .PHONY: dev lint test test-coverage check install build publish package-install

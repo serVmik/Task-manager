@@ -14,6 +14,18 @@ poetry add --group doc mkdocs-awesome-pages-plugin
 ```
 
 
+## [Sphinx](https://docs.readthedocs.io/en/stable/index.html)
+[install](https://docs.readthedocs.io/en/stable/intro/getting-started-with-sphinx.html#quick-start)
+```cfgrlanguage
+poetry add --group doc sphinx
+```
+[Install Using Markdown with Sphinx](https://docs.readthedocs.io/en/stable/intro/getting-started-with-sphinx.html#using-markdown-with-sphinx)
+```
+poetry add --group doc myst-parser
+```
+[Example projects](https://docs.readthedocs.io/en/stable/examples.html#example-projects)
+
+
 ## [jupyter-notebook](https://jupyter.org/install#jupyter-notebook)
 ```cfgrlanguage
 poetry add --group shell notebook==6.5.6

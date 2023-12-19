@@ -40,6 +40,12 @@ rollbar = "^0.16.3"
 pytest-playwright = "^0.4.3"
 playwright = "^1.38.0"
 
+
+[tool.poetry.group.doc.dependencies]
+mkdocs = "^1.5.3"
+mkdocs-material = "^9.5.2"
+mkdocs-awesome-pages-plugin = "^2.9.2"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

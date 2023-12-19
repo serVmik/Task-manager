@@ -1,16 +1,16 @@
-.env
-logging.log
-db.sqlite3
 .idea/
-dist/
+.ipynb_checkpoints/
 __pycache__/
+dist/
+htmlcov/
+management/
+pytest_cache/
+tests_end2end/
 
 .coverage
 .coveragerc
+.env
+*.sqlite3
 coverage.xml
-htmlcov/
-tests_end2end/
-pytest_cache/
-
-management/
+logging.log
 test_data.py

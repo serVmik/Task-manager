@@ -37,16 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    # installed packages
     'django_bootstrap5',
     'django_filters',
-
+    'django_extensions',
+    # project applications
     'task_manager',
     'task_manager.users',
     'task_manager.statuses',
     'task_manager.tasks',
     'task_manager.labels',
 ]
+# End Application definition
 
 # https://docs.djangoproject.com/en/4.1/topics/i18n/translation/#how-django-discovers-language-preference
 MIDDLEWARE = [

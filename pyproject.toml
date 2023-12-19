@@ -45,6 +45,8 @@ playwright = "^1.38.0"
 mkdocs = "^1.5.3"
 mkdocs-material = "^9.5.2"
 mkdocs-awesome-pages-plugin = "^2.9.2"
+sphinx = "^7.2.6"
+myst-parser = "^2.0.0"
 
 
 [tool.poetry.group.shell.dependencies]
